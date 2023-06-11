@@ -127,7 +127,7 @@ def playsong(mysong):
                 if (mysong[i] == "P"):
                     bequiet()
                 else:
-                    playtone(tones[mysong[i]]
+                    playtone(tones[mysong[i]])
                 sleep(0.3)
             bequiet()
 
