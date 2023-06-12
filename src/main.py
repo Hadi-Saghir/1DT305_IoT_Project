@@ -1,24 +1,40 @@
-def http_get(url='http://detectportal.firefox.com/'):
-    import socket                           # Used by HTML get request
-    import time                             # Used for delay
-    _, _, host, path = url.split('/', 3)    # Separate URL request
-    addr = socket.getaddrinfo(host, 80)[0][-1]  # Get IP address of host
-    s = socket.socket()                     # Initialize the socket
-    s.connect(addr)                         # Try connecting to the host address
-    # Send HTTP request to the host with the specific path
-    s.send(bytes('GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n' % (path, host), 'utf8'))
-    time.sleep(1)                           # Sleep for a second
-    rec_bytes = s.recv(10000)               # Receive response
-    print(rec_bytes)                        # Print the response
-    s.close()                               # Close the connection
+import machine
+import secrets
+from umqtt.robust import MQTTClient
 
+# Pin configuration
+sound_pin = machine.Pin(27, machine.Pin.IN)
 
-# Connect to WiFi and perform HTTP request
-http_get()
+# MQTT Broker configuration
+mqtt_broker = "07bd001441864fcabc7b1a8b9677149a.s2.eu.hivemq.cloud"
+mqtt_port = 8883
+mqtt_topic = "brewing/check-sound"
 
+# MQTT client configuration
+client_id = 'pico'
+client_username = secrets.MQTT_USERNAME.encode('utf-8')
+client_password = secrets.MQTT_PASSWORD.encode('utf-8')
 
+def check_sound():
+    # Check if sound is detected
+    sound_detected = sound_pin.value()
+    return "true" if sound_detected else "false"
 
+def handle_message(topic, message):
+    print("Received message: ", message.decode())
+    if topic == mqtt_topic and message.decode() == "check":
+        response = check_sound()
+        client.publish(topic + "/response", response)
 
+client = MQTTClient(client_id, mqtt_broker, port=mqtt_port, user=client_username, password=client_password, ssl=True)
 
+# Connect to MQTT broker
+client.connect()
 
-# wlan.connect('It burns when IP', auth=(WLAN.WPA2, 'Marionaoum1'))
+# Subscribe to MQTT topic
+client.set_callback(handle_message)
+client.subscribe(mqtt_topic)
+
+# Main loop
+while True:
+    client.wait_msg()
