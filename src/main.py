@@ -1,13 +1,13 @@
 import machine
 import secrets
-from umqtt.robust import MQTTClient
+from umqtt.simple import MQTTClient
 
 # Pin configuration
 sound_pin = machine.Pin(27, machine.Pin.IN)
 
 # MQTT Broker configuration
-mqtt_broker = "07bd001441864fcabc7b1a8b9677149a.s2.eu.hivemq.cloud"
-mqtt_port = 8883
+mqtt_broker = "192.168.1.111"
+mqtt_port = 1883
 mqtt_topic = "brewing/check-sound"
 
 # MQTT client configuration
@@ -26,10 +26,10 @@ def handle_message(topic, message):
         response = check_sound()
         client.publish(topic + "/response", response)
 
-client = MQTTClient(client_id, mqtt_broker, port=mqtt_port, user=client_username, password=client_password, ssl=True)
+client = MQTTClient(client_id, mqtt_broker, port=mqtt_port)
 
 # Connect to MQTT broker
-client.connect()
+client.connect(clean_session=True)
 
 # Subscribe to MQTT topic
 client.set_callback(handle_message)
