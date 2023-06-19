@@ -5,6 +5,7 @@ from utils.MQTTHandler import MQTTHandler
 from utils.SensorHandler import SensorHandler
 from utils.ActuatorHandler import ActuatorHandler
 
+print("Running")
 class Machine:
     def __init__(self):
         self.connection_handler = ConnectionHandler()
