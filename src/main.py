@@ -11,6 +11,7 @@ class Machine:
         self.connection_handler = ConnectionHandler()
         self.connection_handler.connect_to_wifi()
         self.mqtt_handler = MQTTHandler(["/brewing", "/topic2"])
+        self.mqtt_handler.connect_to_mqtt()
         self.sensor_handler = SensorHandler()
         self.actuator_handler = ActuatorHandler()
         self.state = "off"
@@ -37,7 +38,14 @@ class Machine:
     def run(self):
         while True:
 
-            self.mqtt_handler.client.check_msg()  # Check for incoming MQTT messages
+            try:
+                while True:
+                    self.mqtt_handler.client.check_msg()
+            finally:
+                # Clean up and disconnect from MQTT broker
+                self.mqtt_handler.client.disconnect()
+
+                print("Disconnected from MQTT broker")  # Check for incoming MQTT messages
 
             if not self.mqtt_handler.isConnected():  # Reconnect if MQTT connection is lost
                 print("Lost connection to MQTT broker. Reconnecting...")

@@ -3,25 +3,30 @@ import time
 from umqtt.simple import MQTTClient
 from secrets import secrets
 
+
 class MQTTHandler:
     def __init__(self, topics):
-        self.broker = secrets['broker']
-        self.port = secrets['port']
+        self.broker = secrets['mqtt_broker']
+        self.port = secrets['mqtt_port']
         self.username = secrets['mqtt_username']
         self.password = secrets['mqtt_key']
         self.client_id = "pico"
-        self.client = MQTTClient(self.client_id, self.broker, port=self.port,
-                                 user=self.username, password=self.password, ssl=True)
-        self.client.connect(clean_session=True)
+        self.client = MQTTClient(client_id="test",
+                                 server=secrets['mqtt_broker'],
+                                 port=secrets['mqtt_port'],
+                                 user=secrets['mqtt_username'],
+                                 password=secrets['mqtt_key'],
+                                 keepalive=secrets['mqtt_keepalive'],
+                                 ssl=True,
+                                 ssl_params=secrets['mqtt_ssl_params'])
         self.topics = topics
-        self.setup_subscriptions()
 
     def publish_callback(self, topic, msg):
         print("Published:", topic, msg)
 
-    def publish_message(self, topic, message):
+    def publish_message(self, topic, message, qos=0):
         try:
-            result = self.client.publish(topic, message,qos=1)
+            result = self.client.publish("test/clientId", "the payload2", qos)
             if result is not None and result[0] == 0:
                 print("Published successfully:", topic, message)
             else:
@@ -38,15 +43,15 @@ class MQTTHandler:
         print("Received message on topic:", topic)
         print("Message:", msg)
         # Handle received message here
-        
+
     def connect_to_mqtt(self):
         try:
             self.client.connect(clean_session=True)
-            self.setup_subscriptions()
             print("Connected to MQTT broker:", self.broker)
+            self.setup_subscriptions()
         except Exception as e:
             print("MQTT connection failure:", e)
-            
+
     def isConnected(self):
         try:
             self.client.ping()

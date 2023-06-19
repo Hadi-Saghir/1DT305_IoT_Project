@@ -4,8 +4,8 @@ from secrets import secrets
 
 class ConnectionHandler:
     def __init__(self):
-        self.ssid = secrets['ssid']
-        self.password = secrets['password']
+        self.ssid = secrets['wifi_ssid']
+        self.password = secrets['wifi_password']
         self.wifi = network.WLAN(network.STA_IF)
         self.wifi.active(True)
 
