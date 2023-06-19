@@ -1,50 +1,64 @@
 import time
-import machine
-import network
 from secrets import secrets
-import ujson
-from umqtt.simple import MQTTClient
+from utils.ConnectionHandler import ConnectionHandler
+from utils.MQTTHandler import MQTTHandler
+from utils.SensorHandler import SensorHandler
+from utils.ActuatorHandler import ActuatorHandler
 
+class Machine:
+    def __init__(self):
+        self.connection_handler = ConnectionHandler()
+        self.connection_handler.connect_to_wifi()
+        self.mqtt_handler = MQTTHandler(["/brewing", "/topic2"])
+        self.sensor_handler = SensorHandler()
+        self.actuator_handler = ActuatorHandler()
+        self.state = "off"
 
-# MQTT Topic to publish data from Pico to HiveMQ Cloud
-topic_name = "/testsensor"
+    def check_temperatures(self):
+        # Check temperatures every 1 minute
+        while True:
+            self.sensor_handler.read_temperature_humidity()
 
-# Connect to the WiFi network
-wifi = network.WLAN(network.STA_IF)
-wifi.active(True)
-wifi.connect(secrets['ssid'], secrets['password'])
-while not wifi.isconnected():
-    pass
-print("Connected to WiFi:", secrets['ssid'])
-print("IP address:", wifi.ifconfig()[0])
+            if self.state == "off":
+                if self.sensor_handler.is_temperature_absurdly_high():
+                    self.alertClient()
+            
+            time.sleep(60)
 
-# MQTT Broker configuration
-mqtt_broker = secrets['broker']
-mqtt_port = secrets['port']
-mqtt_username = secrets['mqtt_username'].encode('utf-8')
-mqtt_password = secrets['mqtt_key'].encode('utf-8')
+    def brew_coffee(self):
+        while self.state == "brewing":
+            self.sensor_handler.read_vibration()
+            
+            if self.sensor_handler.is_coffee_ready():
+                self.state = "warm"
+                self.actuator_handler.turn_on_warming_plate()
 
-# Create MQTT client
-client_id = "pico"
-client = MQTTClient(client_id, mqtt_broker, port=mqtt_port,
-                    user=mqtt_username, password=mqtt_password, keepalive=3600)
+    def run(self):
+        while True:
 
-# Connect to MQTT broker
-client.connect(clean_session=True)
+            self.mqtt_handler.client.check_msg()  # Check for incoming MQTT messages
 
-# Define MQTT callback function
+            if not self.mqtt_handler.isConnected():  # Reconnect if MQTT connection is lost
+                print("Lost connection to MQTT broker. Reconnecting...")
+                self.mqtt_handler.connect_to_mqtt()
+                time.sleep(1)
+            
+            if self.mqtt_handler.isConnected(): self.mqtt_handler.publish_message('/brewing', 'test')
+            if self.state == "off":
+                print("temp")
+                #self.check_temperatures()
+            elif self.state == "brewing":
+                self.brew_coffee()
+            elif self.state == "warm":
+                if self.sensor_handler.is_temperature_low():
+                    self.actuator_handler.turn_on_warming_plate()
+                else:
+                    self.actuator_handler.turn_off_warming_plate()
 
+            time.sleep(5)
 
-def publish_callback(topic, msg):
-    print("Published: ", topic, msg)
-
-
-# Continuously measure the distance and send the value to HiveMQ
-print("Starting the distance measurement")
-while True:
-    try:
-        message = ujson.dumps({"value": 1})
-        client.publish(topic_name, message, callback=publish_callback)
-    except Exception as e:
-        print("Distance measurement failure:", e)
-    time.sleep(1)
+    def alertClient(self):
+        # Implement alerting the client here
+        pass
+machine = Machine()
+machine.run()
