@@ -1,20 +1,22 @@
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+import requests
 
 print('Starting up bot...')
 
-TOKEN: Final = '6140132163:AAGhUy8C9tj8afJfkbkbgjFWUyZiw9MMYGk'
+TOKEN: Final = "6140132163:AAGhUy8C9tj8afJfkbkbgjFWUyZiw9MMYGk"
 BOT_USERNAME: Final = '@LNU_Coffee_Bot'
+base_url = 'http://localhost:1880'
 
 
 # /start command
 async def start_command(update, context):
-    update.message.reply_text("Hello! Welcome to LNU Coffee Bot")
+    await update.message.reply_text("Hello! Welcome to LNU Coffee Bot")
     
 # /help command
 async def help_command(update,context):
-    update.message.reply_text("""
+    await update.message.reply_text("""
     The following commands are avilable:
     
     /start -> Welcome to the channel
@@ -26,13 +28,16 @@ async def help_command(update,context):
     
 # /help command
 async def reg_command(update, context):
-    update.message.reply_text("reg")
+    url = f'{base_url}/brewing/start'
+    response = requests.get(url)
+    print("reg")
+    return (response.text)
 
 async def brew_command(update, context):
-    update.message.reply_text("brew")
+    await update.message.reply_text("brew")
 
 async def warm_command(update, context):
-    update.message.reply_text("warm")
+    await update.message.reply_text("warm")
 
 
 
