@@ -1,7 +1,12 @@
 from typing import Final
+
+#pip install requests & pip install aiohttp
+import requests
+import aiohttp
+
+# pip install python-telegram-bot
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-import requests
 
 print('Starting up bot...')
 
@@ -11,11 +16,11 @@ base_url = 'http://localhost:1880'
 
 
 # /start command
-async def start_command(update, context):
-    await update.message.reply_text("Hello! Welcome to LNU Coffee Bot")
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text('Hello there! I\'m a bot. What\'s up?')
     
 # /help command
-async def help_command(update,context):
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("""
     The following commands are avilable:
     
@@ -27,25 +32,31 @@ async def help_command(update,context):
      """)
     
 # /help command
-async def reg_command(update, context):
+async def reg_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     url = f'{base_url}/brewing/start'
-    response = requests.get(url)
-    print("reg")
-    return (response.text)
+    print('Before request')
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, timeout=3) as response:
+            if response.status == 200:
+                await update.message.reply_text('Request sent successfully')
+            else:
+                await update.message.reply_text('Error sending request')
+    print('After request')
 
-async def brew_command(update, context):
+async def brew_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("brew")
 
-async def warm_command(update, context):
+async def warm_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("warm")
 
 
 
-async def handle_response(text: str) -> str:
+
+def handle_response(text: str) -> str:
     # Create your own response logic
     processed: str = text.lower()
 
-    if 'reg' in processed:
+    if 'hello' in processed:
         return 'Hey there!'
 
     if 'how are you' in processed:
@@ -91,12 +102,12 @@ if __name__ == '__main__':
     app = Application.builder().token(TOKEN).build()
 
     # Commands
-    app.add_handler(CommandHandler('start',start_command))
-    app.add_handler(CommandHandler('help',help_command))
-    app.add_handler(CommandHandler('reg',reg_command))
-    app.add_handler(CommandHandler('brew',brew_command))
-    app.add_handler(CommandHandler('warm',warm_command))
-    
+    app.add_handler(CommandHandler('start', start_command))
+    app.add_handler(CommandHandler('help', help_command))
+    app.add_handler(CommandHandler('reg', reg_command))
+    app.add_handler(CommandHandler('brew', brew_command))
+    app.add_handler(CommandHandler('warm', warm_command))
+
     # Messages
     app.add_handler(MessageHandler(filters.TEXT, handle_message))
 
@@ -105,4 +116,4 @@ if __name__ == '__main__':
 
     print('Polling...')
     # Run the bot
-    app.run_polling(poll_interval=5)
+    app.run_polling(poll_interval=1)
