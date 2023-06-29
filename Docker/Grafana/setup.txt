@@ -1,10 +1,32 @@
-Open the browser and search localhost:8086.
+Step 1: Open your preferred web browser and enter the following URL in the address bar: http://localhost:8086. This will connect you to the InfluxDB web interface.
 
-Login to Management center with the following credentials username: ‘hadi’ and password: ‘Iminyourarea’
+Step 2: On the InfluxDB login page, enter the following credentials to log in:
 
-Add influxdb as a data source using this tutorial
+Username: hadi
+Password: Iminyourarea
 
-Create the following dashboards using this query of influxdb data source (refer to this tutorial on how to set up a dashboard):
+Step 3: After successful login, you will be redirected to the InfluxDB web interface.
+
+Step 4: After logging in to the Management Center, you will have access to additional functionalities for managing InfluxDB.
+
+Step 5: To add InfluxDB as a data source in the Management Center, follow these steps:
+	a. On the left-hand side navigation menu, click on "Data" to access the Data section.
+	b. Under the "Data Sources" tab, click on the "Add Data Source" button.
+	c. In the "Add Data Source" form, enter the following details:
+		- Name: Provide a name for the data source, e.g., InfluxDB.
+		- URL: http://influxdb:8086 (assuming InfluxDB is running on the same Docker network).
+		- Username: XXXX  Provide the username of a client
+		- Password: Provide the username of a client
+		- Organization: XXXX (replace with your organization name).
+		- Token: XXX (replace with your InfluxDB admin token).
+	d. Click on the "Save" button to add InfluxDB as a data source.
+
+Step 6: Now, let's create two dashboards using the InfluxDB data source:
+	a. On the left-hand side navigation menu, click on "Dashboards" to access the Dashboards section.
+	b. Click on the "Create Dashboard" button to create a new dashboard.
+	c. In the dashboard editor, provide a name for the first dashboard, e.g., "Brewing Temp".
+	d. Click on the "Add Cell" button to add a cell to the dashboard.
+	e. In the cell editor, click on the "Query Builder" button and enter the following query and repeat 	for the other queries:
 
 Brewing temp:
 from(bucket: "brew")

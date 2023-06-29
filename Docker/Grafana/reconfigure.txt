@@ -1,0 +1,31 @@
+Step 1: Open the Docker Compose file (docker-compose.yml) in a text editor.
+
+Step 2: Locate the grafana section in the file. It should look like this:
+
+
+grafana:
+  image: grafana/grafana-enterprise
+  container_name: grafana
+  ports:
+    - 3000:3000
+  expose:
+    - 3000
+  environment:
+    - GF_SECURITY_ADMIN_USER=hadi
+    - GF_SECURITY_ADMIN_PASSWORD=Iminyourarea
+  networks:
+    - IoT_1DT305
+  volumes:
+    - grafana-data:/var/lib/grafana
+
+Step 3: To reconfigure Grafana, modify the environment variables as needed
+
+Step 4: recompose docker
+
+Step 5: Save the changes to the Docker Compose file.
+
+Step 6: In the terminal or command prompt, navigate to the directory where the Docker Compose file is located.
+
+Step 7: Run the following command to apply the new configuration and start the Grafana container:
+
+	'docker-compose up -d'
