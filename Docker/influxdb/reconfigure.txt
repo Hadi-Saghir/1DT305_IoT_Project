@@ -1,0 +1,42 @@
+Sure! Here's a tutorial on how to configure the Docker Compose file for InfluxDB:
+
+Step 1: Create a new file named docker-compose.yml in your project directory.
+
+Step 2: Open the docker-compose.yml file in a text editor and add the following configuration for InfluxDB:
+
+yaml
+Copy code
+version: '3.8'
+services:
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - 8086:8086
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=XXXX
+      - DOCKER_INFLUXDB_INIT_PASSWORD=XXXX
+      - DOCKER_INFLUXDB_INIT_ORG=XXXX
+      - DOCKER_INFLUXDB_INIT_BUCKET=readings 
+      - DOCKER_INFLUXDB_INIT_RETENTION=365d
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=XXX
+    networks:
+      - IoT_1DT305
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+networks:
+  IoT_1DT305:
+volumes:
+  influxdb-data:
+Step 3: Replace the placeholder values (XXXX and XXX) with your desired configuration details. Here's an explanation of the configuration options:
+
+DOCKER_INFLUXDB_INIT_USERNAME: Set your desired username for InfluxDB administration.
+DOCKER_INFLUXDB_INIT_PASSWORD: Set your desired password for InfluxDB administration.
+DOCKER_INFLUXDB_INIT_ORG: Specify the name of your organization.
+DOCKER_INFLUXDB_INIT_BUCKET: Set the name of the bucket to store the data readings.
+DOCKER_INFLUXDB_INIT_RETENTION: Define the retention period for the data in the bucket (e.g., 365d for 365 days).
+DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: Set your desired admin token for InfluxDB.
+Step 4: Save the docker-compose.yml file.
+
+Step 5: Open a terminal or command prompt, navigate to the project directory containing the docker-compose.yml file, and run the following command:

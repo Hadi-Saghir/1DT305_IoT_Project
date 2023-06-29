@@ -1,12 +1,30 @@
-Open the browser and search localhost:8086.
+Step 1: Open your preferred web browser and enter the following URL in the address bar: http://localhost:8086. This will connect you to the InfluxDB web interface.
 
-Login to influxdb with the following credentials username: ‘hadi’ and password ‘Iminyourarea’
+Step 2: On the InfluxDB login page, enter the following credentials to log in:
 
-Create 2 buckets “warm” and “brew” by following this tutorial
+Username: hadi
+Password: Iminyourarea
 
-Create an two api token by following this tutorial:
-	1.“Grafana” with read rights to brew and warm
-	2.“NodeRED” with read and write rights to brew and warm
+Step 3: After successful login, you will be redirected to the InfluxDB web interface.
+
+Step 4: To create two buckets, follow these steps:
+	a. On the left-hand side navigation menu, click on "Data" to access the Data section.
+	b. Under the "Buckets" tab, click on the "Create Bucket" button.
+	c. In the "Create Bucket" form, enter the following details:
+		- Name: warm
+		- Retention Period: Set the desired retention period for the bucket.
+	d. Click on the "Create" button to create the "warm" bucket.
+	e. Repeat steps b to d to create the second bucket named "brew".
+
+Step 5: Now, let's create two API tokens for Grafana and Node-RED:
+	a. On the left-hand side navigation menu, click on "Load Data" to access the Load Data section.
+	b. Under the "Tokens" tab, click on the "Generate" button to create a new token.
+	c. In the "New Token" form, enter the following details:
+		- Description: Grafana
+		- Permissions: Select the "Read" permission for both the "brew" and "warm" buckets.
+		d. Click on the "Save" button to create the Grafana API token.
+	e. Repeat steps b to d to create the second token named "NodeRED", but this time select both "Read" and 	"Write" permissions for the "brew" and "warm" buckets.
+
 
 Note down the following values in security or here:
 Information of the db:
@@ -14,5 +32,13 @@ Information of the db:
     INFLUXDB_ORGANIZATION: "ENTER ORGANIZATION REGISTERED"
     INFLUXDB_USER: "ENTER USERNAME FOR THE NEW CLIENT"
     INFLUXDB_PASSWORD: "ENTER PASSWORD FOR THE NEW CLIENT"
+    INFLUXDB_API_GRAFANA: "ENTER API TOKEN FOR GRAFANA"
+    INFLUXDB_API_NODERED: "ENTER API TOKEN FOR NODERED"
+
+Information of preconfigured:
+    INFLUXDB_URL: http://influxdb:8086 
+    INFLUXDB_ORGANIZATION: "hadsag"
+    INFLUXDB_USER: "hadi"
+    INFLUXDB_PASSWORD: "Iminyourarea"
     INFLUXDB_API_GRAFANA: "ENTER API TOKEN FOR GRAFANA"
     INFLUXDB_API_NODERED: "ENTER API TOKEN FOR NODERED"

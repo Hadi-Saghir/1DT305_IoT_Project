@@ -1,2 +1,0 @@
-!!!When cloning the project, please add this to .gitignore as it will store security critical data!!!!
-
