@@ -9,10 +9,6 @@ from utils.ActuatorHandler import ActuatorHandler
 
 class Machine:
     def __init__(self):
-        print("1")
-        #machine.deepsleep(5000)
-        print("2")
-        #Handlers
         self.connection_handler = ConnectionHandler()
         self.connection_handler.connect_to_wifi()
         self.mqtt_handler = MQTTHandler(["brew/start", "warm/start"])
@@ -23,6 +19,10 @@ class Machine:
         #Energy variables
         self.command_counter = 0
         self.command_received = False
+
+        #LoRaWan
+        #self.lora = LoRaCon()
+        #self.lora.connect()
         
         
 
