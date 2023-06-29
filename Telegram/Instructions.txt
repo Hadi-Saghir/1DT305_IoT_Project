@@ -1,4 +1,16 @@
-# Install requirements
+This option is if you want to host telegram using python and not Node-RED
 
+#Setup the Telegrambot
+Download the Telegram mobile app or visit https://telegram.org/ on your computer.
+Sign up for a Telegram account if you don’t have one already.
+In the Telegram app or web interface, search for the “BotFather” and start a chat with it.
+Follow the instructions provided by the BotFather to create a new Telegram bot and obtain the API token for the bot.
+Make a note of the API token as you will need it to connect your Node-RED flow with Telegram:
+	Tele_API = "Enter key here"
+
+# Install requirements
 pip install python-telegram-bot
 pip install requests
+
+# create .env file and store the following
+TELEGRAM_TOKEN = "YOUR TELEGRAM TOKEN"
