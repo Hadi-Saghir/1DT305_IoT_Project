@@ -1,0 +1,22 @@
+Open the browser and search localhost:8086.
+
+Login to Management center with the following credentials username: ‘hadi’ and password: ‘Iminyourarea’
+
+Add influxdb as a data source using this tutorial
+
+Create the following dashboards using this query of influxdb data source (refer to this tutorial on how to set up a dashboard):
+
+Brewing temp:
+from(bucket: "brew")
+  |> range(start: 0)
+  |> filter(fn: (r) => r._measurement == "temp")
+
+Warm temp:
+from(bucket: "warm")
+  |> range(start: 0)
+  |> filter(fn: (r) => r._measurement == "temp") 
+
+Warm humid:
+from(bucket: "warm")
+  |> range(start: 0)
+  |> filter(fn: (r) => r._measurement == "humid") 

@@ -1,0 +1,87 @@
+version: "3.6"
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2-openssl
+    ports:
+      - 1883:1883
+    networks:
+      - IoT_1DT305
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+
+  management-center:
+    image: cedalo/management-center:2
+    ports:
+      - 8088:8088
+    depends_on:
+      - mosquitto
+    networks:
+      - IoT_1DT305
+    environment:
+      CEDALO_MC_BROKER_ID: mosquitto-2.0
+      CEDALO_MC_BROKER_NAME: Mosquitto 2.0
+      CEDALO_MC_BROKER_URL: mqtt://mosquitto:1883
+      CEDALO_MC_BROKER_USERNAME: hadi
+      CEDALO_MC_BROKER_PASSWORD: Iminyourarea
+      CEDALO_MC_USERNAME: hadi
+      CEDALO_MC_PASSWORD: Iminyourarea
+      CEDALO_STREAMSHEETS_ID: streamsheets-local
+      CEDALO_STREAMSHEETS_NAME: Streamsheets
+      CEDALO_STREAMSHEETS_DESCRIPTION: Local Streamsheets
+      CEDALO_STREAMSHEETS_URL: http://localhost:8081
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - 8086:8086
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=hadi
+      - DOCKER_INFLUXDB_INIT_PASSWORD=Iminyourarea
+      - DOCKER_INFLUXDB_INIT_ORG=hadsag
+      - DOCKER_INFLUXDB_INIT_BUCKET=readings
+      - DOCKER_INFLUXDB_INIT_RETENTION=365d
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=9b8cf7e8-9d7a-4e54-b690-1b6f32a17498
+    networks:
+      - IoT_1DT305
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=hadi
+      - GF_SECURITY_ADMIN_PASSWORD=Iminyourarea
+    networks:
+      - IoT_1DT305
+    volumes:
+      - grafana-data:/var/lib/grafana
+  
+  nodered:
+    image: nodered/node-red
+    container_name: nodered
+    ports:
+      - 1880:1880
+    networks:
+      - IoT_1DT305
+    volumes:
+      - nodered-data:/data
+volumes:
+  influxdb-data:
+  grafana-data:
+  nodered-data:
+  mosquitto-config:
+  mosquitto-data:
+  management-center-data:
+
+networks:
+  IoT_1DT305:
+    name: IoT_1DT305
+    driver: bridge

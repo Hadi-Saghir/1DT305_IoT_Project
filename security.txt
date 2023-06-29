@@ -1,0 +1,35 @@
+!!!When cloning the project, please add "security.txt" to .gitignore as it will store security critical data!!!!
+
+You can use the following document to store keys for ease. This is secure, but this is a very low risk as this is small hobby project in an isolated environment. Enter the following configuration keys:
+
+Link to Host:
+	IP: "ENTER OWN WIFI IPV4 ADDRESS"
+Links to the different services:
+	Mosquitto: mqtt://mosquitto:1883
+	Management Center: http://management-center:8088
+	InfluxDB: http://influxdb:8086
+	Grafana: http://grafana:3000
+	Node-RED: http://nodered:1880
+
+Information of the MQTT:
+	MQTT_BROKER: "ENTER SERVERS WIFI IPV4 ADDRESS"
+	MQTT_PORT: 1883
+	MQTT_USER: "ENTER USERNAME FOR THE NEW CLIENT"
+	MQTT_PASSWORD: "ENTER PASSWORD FOR THE NEW CLIENT"
+
+Information of the db:
+	INFLUXDB_URL: http://influxdb:8086
+	INFLUXDB_ORGANIZATION: "ENTER ORGANIZATION REGISTERED"
+	INFLUXDB_USER: "ENTER USERNAME FOR THE NEW CLIENT"
+	INFLUXDB_PASSWORD: "ENTER PASSWORD FOR THE NEW CLIENT"
+	INFLUXDB_API_GRAFANA: "ENTER API TOKEN FOR GRAFANA"
+	INFLUXDB_API_NODERED: "ENTER API TOKEN FOR NODERED"
+
+Info for Helium:
+	DEV_ID = "ENTER ID HERE"
+	DEV_EUI = "ENTER EUI HERE"
+	APP_EUI = "ENTER EUI HERE"
+	APP_KEY = "ENTER KEY HERE"
+
+Information for Telegram:
+	TELE_API = "ENTER KEY HERE"

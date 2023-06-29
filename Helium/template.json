@@ -1,0 +1,17 @@
+{
+  "name": "{{name}}",
+  "dev_eui": "{{dev_eui}}",
+  "reported_at": "{{reported_at}}",
+  {{#hotspots}}
+  "hotspot_name": "{{name}}",
+  "rssi": "{{rssi}}",
+  "snr": "{{snr}}",
+  "spreading": "{{spreading}}",
+  "raw_data": "{{payload}}",
+  {{/hotspots}}
+  {{#decoded}}{{#payload}}
+  "topic": "{{topic}}",
+  "temperature": "{{temperature}}",
+  "humidity": "{{humidity}}",
+  {{/payload}}{{/decoded}}
+}

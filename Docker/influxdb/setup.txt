@@ -1,0 +1,18 @@
+Open the browser and search localhost:8086.
+
+Login to influxdb with the following credentials username: ‘hadi’ and password ‘Iminyourarea’
+
+Create 2 buckets “warm” and “brew” by following this tutorial
+
+Create an two api token by following this tutorial:
+	1.“Grafana” with read rights to brew and warm
+	2.“NodeRED” with read and write rights to brew and warm
+
+Note down the following values in security or here:
+Information of the db:
+    INFLUXDB_URL: http://influxdb:8086 
+    INFLUXDB_ORGANIZATION: "ENTER ORGANIZATION REGISTERED"
+    INFLUXDB_USER: "ENTER USERNAME FOR THE NEW CLIENT"
+    INFLUXDB_PASSWORD: "ENTER PASSWORD FOR THE NEW CLIENT"
+    INFLUXDB_API_GRAFANA: "ENTER API TOKEN FOR GRAFANA"
+    INFLUXDB_API_NODERED: "ENTER API TOKEN FOR NODERED"

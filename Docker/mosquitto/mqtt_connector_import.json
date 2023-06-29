@@ -1,0 +1,39 @@
+{
+    "version": 2,
+    "machines": [],
+    "streams": [
+        {
+            "id": "rkE1izx2v",
+            "name": "MQTT_Connector",
+            "owner": null,
+            "disabled": null,
+            "className": "ConnectorConfiguration",
+            "lastModified": "2020-08-12T12:17:10.230Z",
+            "lastAccessed": "2019-09-06T11:23:30.642Z",
+            "provider": {
+                "_id": "@cedalo/stream-mqtt",
+                "id": "@cedalo/stream-mqtt",
+                "className": "ProviderConfiguration",
+                "owner": null,
+                "disabled": null,
+                "lastModified": null,
+                "lastAccessed": null,
+                "isRef": true
+            },
+            "protocolVersion": 4,
+            "url": "mosquitto:1883",
+            "userPropertiesConnect": [],
+            "userName": "hadi_client",
+            "password": "Iminyourarea",
+            "certPath": "",
+            "keyPath": "",
+            "caCert": "",
+            "baseTopic": "",
+            "retain": false,
+            "qos": 0,
+            "scope": {
+                "id": "root"
+            }
+        }
+    ]
+}
