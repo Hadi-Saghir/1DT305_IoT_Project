@@ -1,0 +1,15 @@
+Follow this tutorial (https://hackmd.io/@lnu-iot/H1z3FYQP2) to set up Helium. It will guide you through the necessary steps to configure Helium for your IoT project.
+
+Once you have set up Helium, obtain the necessary credentials provided by Helium for integration with your project.
+
+In your project's security.txt file, add the obtained credentials. This file serves as a centralized location to store sensitive information securely. Make sure to keep this file confidential and restrict access to it.
+
+Open the Helium Console and navigate to "Integrations" > "Add New Integration".
+
+Select MQTT as the integration type. Fill in the MQTT server address in the format mqtt://YOURSERVERIP:1883. Replace YOURSERVERIP with the actual IP address of your MQTT server.
+
+Next, add the template body for your integration. You can find the template body in "https://github.com/Hadi-Saghir/1DT305_IoT_Project/blob/main/Helium/template.json". Copy and paste the contents of the template file and then save the template. We can customize the template body to include only the relevant data fields, making it easier to parse and less energy consuming.
+
+Finalize the integration setup by clicking "Add Integration". This will establish the connection between Helium and your MQTT server.
+
+To decode the messages received from Helium, you can add a JavaScript function in your project. You can find an example of a decoding function https://github.com/Hadi-Saghir/1DT305_IoT_Project/blob/main/Helium/decode.js. Copy the contents of the JavaScript file and integrate as function. This function will extract and process the relevant data from the incoming messages, allowing MQTT and in turn NodeRED to receive data it can work with. Otherwise, this can be done on NodeRED.
