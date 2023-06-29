@@ -10,15 +10,8 @@ class LoRaConnectionHandler:
     def __init__(self):
         self.lora = None
         self.lora_sock = None
-        self.last_msg_id = -1
-        self._LORA_PKG_FORMAT = "!Bff"
-        self._LORA_PKG_ACK_FORMAT = "BB"
-        #! indicates network (big-endian) byte order.
-        #B represents an unsigned char (1 byte) data type.
-        #f represents a float (4 bytes) data type.
     
     def connect(self):
-        time.sleep(1)
         self.lora.configure(secrets["LORA_DEV_EUI"], secrets["LORA_APP_EUI"], secrets["LORA_APP_KEY"])
         self.lora = LoRa(mode=LoRa.LORA, rx_iq=True, region=LoRa.EU868)
         self.lora_sock = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
@@ -29,7 +22,7 @@ class LoRaConnectionHandler:
         for _ in range(max_tries):
             if self.lora.has_joined():
                 break;
-            time.sleep(2.5)
+            time.sleep(3)
             print('Not yet joined...')
         else:
             raise Exception("Failed to join LoRa modules after multiple tries.")
