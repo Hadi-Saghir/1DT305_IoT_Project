@@ -6,7 +6,7 @@ In your project's security.txt file, add the obtained credentials. This file ser
 
 Open the Helium Console and navigate to "Integrations" > "Add New Integration".
 
-Select MQTT as the integration type. Fill in the MQTT server address in the format mqtt://YOURSERVERIP:1883. Replace YOURSERVERIP with the actual IP address of your MQTT server.
+Select MQTT as the integration type. Fill in the MQTT server address in the format mqtt://YOURSERVERIP:1883 (doesn't support SSL). Replace YOURSERVERIP with the actual IP address of your MQTT server.
 
 Next, add the template body for your integration. You can find the template body in "https://github.com/Hadi-Saghir/1DT305_IoT_Project/blob/main/Helium/template.json". Copy and paste the contents of the template file and then save the template. We can customize the template body to include only the relevant data fields, making it easier to parse and less energy consuming.
 
