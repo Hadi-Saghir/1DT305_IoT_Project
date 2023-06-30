@@ -1,0 +1,13 @@
+Ubuntu
+
+sudo apt install mosquitto mosquitto-clients
+
+sudo mosquitto_passwd -c /etc/mosquitto/passwd <username>
+
+sudo nano /etc/mosquitto/conf.d/default.conf
+
+sudo nano /etc/mosquitto/mosquitto.conf
+
+Copy the mosquitto.conf found in my repo under 1DT305_IoT_Project/Docker/mosquitto/config
+
+sudo systemctl restart mosquitto
