@@ -12,7 +12,7 @@ from utils.ActuatorHandler import ActuatorHandler
 class Machine:
     def __init__(self):
         self.connection_handler = ConnectionHandler()
-        self.connection_handler.connect_to_wifi()
+        self.connection_handler.connect()
         self.mqtt_handler = MQTTHandler(["brew/start", "warm/start"])
         self.mqtt_handler.connect_to_mqtt()
         self.sensor_handler = SensorHandler()
