@@ -32,25 +32,17 @@ class LoRaConnectionHandler:
         
         
     def pub_sensor_values(self, client, topic, temperature, humidity):
-        # Create the message dictionary
-        message = {
-            "temperature": "{{temperature}}",
-            "humidity": "{{humidity}}"
-        }''
-
-        # Fill in the dynamic values in the message template
-        message["temperature"] = temperature
-        message["humidity"] = humidity
-
-        # Convert the message to JSON
-        json_message = json.dumps(message)
-
-        # Send the JSON message using your desired method
-        # For example, you can publish it to an MQTT topic
-        try:
-            client.publish(topic=topic, msg=json_message)
-        except Exception as e:
-            print("publish failed")
-             # if WLAN.isConnected() use wifi
+        temperature = ...
+        humidity = ...
+        
+        """
+        Prepare data packing to send
+        Payload format is: >hB where
+        h = Temperature         (2 bytes, 16 bits, signed)       Range: -32,768 to 32,767
+        B = Humidity            (1 byte,  8 bits,  unsigned)     Range: 0 to 255
+        """
+        package = struct.pack('>hB', int(temperature), int(humidity))
+        s.send(package) 
+        print('Sensor data sent!') 
 
              
