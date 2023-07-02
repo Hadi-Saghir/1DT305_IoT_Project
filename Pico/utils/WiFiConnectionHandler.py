@@ -4,8 +4,8 @@ from secrets import secrets
 
 class ConnectionHandler:
     def __init__(self):
-        self.ssid = secrets['wifi_ssid']
-        self.password = secrets['wifi_password']
+        self.ssid = secrets['WIFI_SSID']
+        self.password = secrets['WIFI_PASSWORD']
         self.wifi = network.WLAN(network.STA_IF)
         self.wifi.active(True)
 
@@ -15,7 +15,7 @@ class ConnectionHandler:
         for _ in range(max_tries):
             if self.wifi.isconnected():
                 break
-            time.sleep(2)
+            time.sleep(3)
             print("Failed to connect to WiFi")
             self.wifi.connect(self.ssid, self.password)
         else:
@@ -30,3 +30,4 @@ class ConnectionHandler:
             self.connect_to_wifi()
             return True
     
+
