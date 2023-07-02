@@ -9,7 +9,7 @@ class ConnectionHandler:
         self.wifi = network.WLAN(network.STA_IF)
         self.wifi.active(True)
 
-    def connect_to_wifi(self):
+    def connect(self):
         self.wifi.connect(self.ssid, self.password)
         max_tries = 3
         for _ in range(max_tries):
