@@ -35,17 +35,42 @@ class LoRaConnectionHandler:
         state = state
         temperature = temperature
         humidity = humidity
-        
+
         """
         Prepare data packing to send
         Payload format is: >hBc where
         h = Temperature         (2 bytes, 16 bits, signed)       Range: -32,768 to 32,767
         B = Humidity            (1 byte,  8 bits,  unsigned)     Range: 0 to 255
         c = State               (1 byte,  8 bits,  character)     Values: 'w' or 'b'
+        
         """
-        package = struct.pack('>hBc', int(temperature), int(humidity), state.encode())
-        s.send(package) 
-        print('Sensor data sent!')    
+        max_tries = 3
+
+        for _ in range(max_tries):
+            try:
+                if not self.lora.has_joined():
+                    self.connect()
+                
+                package = struct.pack('>hBc', int(temperature), int(humidity), state.encode())
+                self.lora_sock.send(package)
+                print('Sensor data sent!')
+                break
+    
+            except Exception as e:
+                print('Error:', e)
+                time.sleep(15)
+    
+        else:
+            try:
+                self.lora_sock.close()
+                self.lora = None
+                self.lora_sock = None
+                wifi_connection_handler = WiFiConnectionHandler()
+                wifi_connection_handler.connect()
+                wifi_connection_handler.pub_sensor_values(state, temperature, humidity)
+    
+            except Exception as e:
+                print('Error:', e)
 
 
              
