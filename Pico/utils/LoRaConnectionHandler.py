@@ -72,7 +72,7 @@ class LoRaConnectionHandler:
                 self.lora_sock = None
 
                 '''
-                Sadly, i imported MQTT to main, which i should have abstracted in WifiiConnectionHandler. Poor design choice due to ignorance that should be refactored.
+                Sadly, I imported MQTT to main, which I should have abstracted in WifiiConnectionHandler. Poor design choice due to ignorance that should be refactored.
                 
                 wifi_connection_handler = WiFiConnectionHandler()
                 wifi_connection_handler.connect()
