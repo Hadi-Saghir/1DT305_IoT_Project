@@ -1,7 +1,9 @@
 import time
+import json
 import re
 from secrets import secrets
-from utils.WifiConnectionHandler import ConnectionHandler
+from utils.WiFiConnectionHandler import ConnectionHandler
+#from utils.LoRaConnectionHandler import LoRaCon
 from utils.MQTTHandler import MQTTHandler
 from utils.SensorHandler import SensorHandler
 from utils.SensorHandler import Sensor
@@ -27,20 +29,19 @@ class Machine:
         
 
     def handle_message(self, topic, message):
-        if topic == b'brew/start' and not self.brew_started:
-            self.brew_started = True
-            self.mqtt_handler.publish_message("brew/started", "Brew process started")
-            if not self.sensor_handler.isCoffeeOn():
-                self.actuator_handler.flash_led()
+        if topic == b'brew/start':
+            self.mqtt_handler.publish_message(b'brew/started', "Brew process started")
             self.brewing()
 
         elif topic == b'warm/start':
-            duration = message.decode().strip("\n\r\t ")
+            data = json.loads(message.decode())
+            duration = data["content"].strip()
+            print(duration)
             if self.validate_duration(duration):
                 self.mqtt_handler.publish_message("warm/started", "Warm process started")
                 self.run_warm_process(duration)
             else:
-                print("Invalid duration format. Expected format: MM:SS")
+                print("Invalid duration format. Expected format: HH:MM")
         self.command_counter = 0
         self.command_received = True
 
@@ -49,38 +50,47 @@ class Machine:
         return re.match(pattern, duration) is not None
 
     def run_warm_process(self, duration):
-        duration_minutes = int(duration.split(":")[0])
-        duration_seconds = int(duration.split(":")[1])
+        duration_minutes, duration_seconds = duration.split(":")
+        duration_minutes = int(duration_minutes)
+        duration_seconds = int(duration_seconds)
         end_time = time.time() + duration_minutes * 60 + duration_seconds
         
         while time.time() < end_time:
             #Measure data and report to cloud for warm report
             temperature, humidity = self.sensor_handler.read(Sensor.DH11)
-            self.mqtt_handler.publish_message("warm/sensor/temp", str(temperature))
-            self.mqtt_handler.publish_message("warm/sensor/humid", str(humidity))
+            self.mqtt_handler.publish_message(b'warm/sensor/temp', str(temperature))
+            self.mqtt_handler.publish_message(b'warm/sensor/humid', str(humidity))
 
-            #Turn on coffee machine if off
-            if not self.sensor_handler.isCoffeeOn:
+            #Turn on coffee machine if on
+            if not self.sensor_handler.isCoffeeOn():
+                print("Coffee machine turning on")
                 self.actuator_handler.flash_led()
 
             time.sleep(15)
             
         #Turn off coffee machine
-        if self.sensor_handler.isCoffeeOn:
-                self.actuator_handler.flash_led()
+        if self.sensor_handler.isCoffeeOn():
+            print("Coffee machine turning off")
+            self.actuator_handler.flash_led()
             
     def brewing(self):
+        #Turn on coffee machine
+        if not self.sensor_handler.isCoffeeOn():
+            print("Coffee machine turning on")
+            self.actuator_handler.flash_led()
+                
         #Wait for the brewing process
-        time.sleep(5)
+        time.sleep(15)
         
         #Measure data and report to cloud for brew report
-        temperature = self.sensor_handler.read(Sensor.DH11)
-        self.mqtt_handler.publish_message("brew/done", "Brew process completed")
-        self.mqtt_handler.publish_message("brew/done/sensor/temp", str(temperature))
+        temperature, humidity = self.sensor_handler.read(Sensor.DH11)
+        self.mqtt_handler.publish_message(b'brew/done', "Brew process completed")
+        self.mqtt_handler.publish_message(b'brew/done/sensor/temp', str(temperature))
         
         #Turn off coffee machine
-        if self.sensor_handler.isCoffeeOn:
-                self.actuator_handler.flash_led()
+        if self.sensor_handler.isCoffeeOn():
+            print("Coffee machine turning off")
+            self.actuator_handler.flash_led()
                 
     def is_night_time(self):
         current_hour = time.localtime()[3]  #index for hour
@@ -90,22 +100,20 @@ class Machine:
     def enter_deep_sleep(self, duration):
         # Calculate the sleep time in milliseconds
         sleep_time = duration * 60 * 60 * 1000  # Convert hours to milliseconds
-        #machine.deepsleep(sleep_time)
+        #machine.deepsleep(sleep_time) #Commeted out for presentation
+        time.sleep(5)
 
     def run(self):
-        self.mqtt_handler.set_message_handler(self.handle_message)
+        self.mqtt_handler.set_message_handler(self.handle_message) 
 
         while True:
             if not self.mqtt_handler.isConnected():
                 print("Lost connection to MQTT broker. Reconnecting...")
                 self.mqtt_handler.connect_to_mqtt()
                 self.mqtt_handler.setup_subscriptions()
-                time.sleep(1)
+                time.sleep(15)
 
             self.mqtt_handler.client.check_msg()
-
-            machine.lightsleep(1000 * 15)
-    
             
             # Check if another command has been received
             if self.command_received:
@@ -114,18 +122,18 @@ class Machine:
                 # Wait for 10 loops (15 seconds * 4)
                 if self.command_counter >= 4:
                     print("No additional commands received. Entering deep sleep...")
-                    # Calculate deep sleep time until 8 AM
-                    self.enter_deep_sleep(2) #Duration in hours
                     self.command_counter = 0
                     self.command_received = False
+                    self.enter_deep_sleep(2) #Duration in hours
             
             # Check if it's night time, and enter deep sleep if true
-            if self.is_night_time():
-                self.enter_deep_sleep(2) #Duration in hours
-
-                print(deep_sleep_time)
-                self.enter_deep_sleep(deep_sleep_time)
+            elif self.is_night_time():
+                self.enter_deep_sleep(10) #Duration in hours
+            
+            else:
+                self.enter_deep_sleep(0.2) #Duration in hours
 
 
 machine = Machine()
+machine.mqtt_handler.client.check_msg()
 machine.run()
