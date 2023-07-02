@@ -30,7 +30,7 @@ make sure to change the port in docker-compose.yml as well:
   mosquitto:
     image: eclipse-mosquitto:2-openssl
     ports:
-      - 1883:1883
+      - 1883:1883 # close this port, if unnecessary
       - 8883:8883 #SSL port, but don't open it for no reason
     networks:
       - IoT_1DT305
