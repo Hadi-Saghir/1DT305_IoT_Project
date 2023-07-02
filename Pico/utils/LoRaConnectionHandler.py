@@ -31,18 +31,21 @@ class LoRaConnectionHandler:
              
         
         
-    def pub_sensor_values(self, client, topic, temperature, humidity):
-        temperature = ...
-        humidity = ...
+    def pub_sensor_values(self, state, temperature, humidity):
+        state = state
+        temperature = temperature
+        humidity = humidity
         
         """
         Prepare data packing to send
-        Payload format is: >hB where
+        Payload format is: >hBc where
         h = Temperature         (2 bytes, 16 bits, signed)       Range: -32,768 to 32,767
         B = Humidity            (1 byte,  8 bits,  unsigned)     Range: 0 to 255
+        c = State               (1 byte,  8 bits,  character)     Values: 'w' or 'b'
         """
-        package = struct.pack('>hB', int(temperature), int(humidity))
+        package = struct.pack('>hBc', int(temperature), int(humidity), state.encode())
         s.send(package) 
-        print('Sensor data sent!') 
+        print('Sensor data sent!')    
+
 
              
