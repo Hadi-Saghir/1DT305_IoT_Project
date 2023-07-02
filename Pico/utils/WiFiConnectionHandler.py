@@ -24,7 +24,7 @@ class ConnectionHandler:
         print("Connected to WiFi:", self.ssid)
         print("IP address:", self.wifi.ifconfig()[0])
 
-    def check_wifi_connection(self):
+    def check_connection(self):
         if not self.wifi.isconnected():
             print("WiFi connection lost. Reconnecting...")
             self.connect_to_wifi()
