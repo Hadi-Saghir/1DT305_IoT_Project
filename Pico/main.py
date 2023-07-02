@@ -3,7 +3,7 @@ import json
 import re
 from secrets import secrets
 from utils.WiFiConnectionHandler import ConnectionHandler
-#from utils.LoRaConnectionHandler import LoRaCon
+#from utils.LoRaConnectionHandler import LoRaConnectionHandler
 from utils.MQTTHandler import MQTTHandler
 from utils.SensorHandler import SensorHandler
 from utils.SensorHandler import Sensor
