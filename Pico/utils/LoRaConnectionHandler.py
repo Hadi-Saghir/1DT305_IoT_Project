@@ -28,7 +28,12 @@ class LoRaConnectionHandler:
             raise Exception("Failed to join LoRa modules after multiple tries.")
 
         print('LoRa connected')
-             
+
+    def check_connection(self):
+        if not self.lora.has_joined():
+            print("LoRa connection lost. Reconnecting...")
+            self.connect()
+            return True
         
         
     def pub_sensor_values(self, state, temperature, humidity):
