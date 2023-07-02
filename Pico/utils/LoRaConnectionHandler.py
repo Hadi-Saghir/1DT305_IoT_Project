@@ -70,9 +70,14 @@ class LoRaConnectionHandler:
                 self.lora_sock.close()
                 self.lora = None
                 self.lora_sock = None
+
+                '''
+                Sadly, i imported MQTT to main, which i should have abstracted in WifiiConnectionHandler. Poor design choice due to ignorance that should be refactored.
+                
                 wifi_connection_handler = WiFiConnectionHandler()
                 wifi_connection_handler.connect()
                 wifi_connection_handler.pub_sensor_values(state, temperature, humidity)
+                '''
     
             except Exception as e:
                 print('Error:', e)
