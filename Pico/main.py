@@ -100,8 +100,7 @@ class Machine:
     
 
     def enter_deep_sleep(self, duration):
-        # Calculate the sleep time in milliseconds
-        sleep_time = duration * 60 * 60 * 1000  # Convert hours to milliseconds
+        sleep_time = duration * 60 * 60 * 1000 # convert to ms
         #machine.deepsleep(sleep_time) #Commeted out for presentation and development (cancels the run)
         time.sleep(5)
 
