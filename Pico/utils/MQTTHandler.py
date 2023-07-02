@@ -6,19 +6,19 @@ from secrets import secrets
 
 class MQTTHandler:
     def __init__(self, topics):
-        self.broker = secrets['mqtt_broker']
-        self.port = secrets['mqtt_port']
-        self.username = secrets['mqtt_username']
-        self.password = secrets['mqtt_key']
+        self.broker = secrets['MQTT_BROKER']
+        self.port = secrets['MQTT_PORT']
+        self.username = secrets['MQTT_USERNAME']
+        self.password = secrets['MQTT_KEY']
         self.client_id = "pico"
-        self.client = MQTTClient(client_id="test",
-                                 server=secrets['mqtt_broker'],
-                                 port=secrets['mqtt_port'],
-                                 user=secrets['mqtt_username'],
-                                 password=secrets['mqtt_key'],
-                                 keepalive=secrets['mqtt_keepalive']
+        self.client = MQTTClient(client_id=self.client_id,
+                                 server=self.broker,
+                                 port=self.port,
+                                 user=self.username,
+                                 password=self.password,
+                                 keepalive=secrets['MQTT_KEEPALIVE']
                                  #,ssl=True,
-                                 #ssl_params=secrets['mqtt_ssl_params']
+                                 #ssl_params=secrets['MQTT_SSL_PARAM']
                                  )
         self.topics = topics
         self.message_handler = None
@@ -29,12 +29,10 @@ class MQTTHandler:
     def publish_message(self, topic, message, qos=0):
         try:
             result = self.client.publish(topic, message, qos)
-            if result[0] == MQTTClient.MQTT_MSG_PUBACK:
-                print("Published successfully:", topic, message)
-            else:
-                print("Failed to publish message:", result)
+            print("Published successfully:", topic, message)
         except Exception as e:
             print("Publishing message failure:", e)
+
 
     def setup_subscriptions(self):
         for topic in self.topics:
