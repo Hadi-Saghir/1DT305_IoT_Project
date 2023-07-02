@@ -23,7 +23,7 @@ class Machine:
         self.command_received = False
 
         #LoRaWan
-        #self.lora = LoRaCon()
+        #self.lora = LoRaConnectionHandler()
         #self.lora.connect()
         
         
@@ -58,6 +58,7 @@ class Machine:
         while time.time() < end_time:
             #Measure data and report to cloud for warm report
             temperature, humidity = self.sensor_handler.read(Sensor.DH11)
+            #self.lora.pub_sensor_values("w", temperature, humidity)
             self.mqtt_handler.publish_message(b'warm/sensor/temp', str(temperature))
             self.mqtt_handler.publish_message(b'warm/sensor/humid', str(humidity))
 
@@ -84,6 +85,7 @@ class Machine:
         
         #Measure data and report to cloud for brew report
         temperature, humidity = self.sensor_handler.read(Sensor.DH11)
+        #self.lora.pub_sensor_values("b", temperature, humidity)
         self.mqtt_handler.publish_message(b'brew/done', "Brew process completed")
         self.mqtt_handler.publish_message(b'brew/done/sensor/temp', str(temperature))
         
@@ -100,7 +102,7 @@ class Machine:
     def enter_deep_sleep(self, duration):
         # Calculate the sleep time in milliseconds
         sleep_time = duration * 60 * 60 * 1000  # Convert hours to milliseconds
-        #machine.deepsleep(sleep_time) #Commeted out for presentation
+        #machine.deepsleep(sleep_time) #Commeted out for presentation and development (cancels the run)
         time.sleep(5)
 
     def run(self):
