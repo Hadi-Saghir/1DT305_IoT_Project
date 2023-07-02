@@ -1,0 +1,39 @@
+I configured SSL certificate using OpenSSL. Please read more on their website and visit the binaries (https://www.openssl.org/) to download the appropiate version
+
+openssl genrsa -des3 -out server.key 2048
+openssl rsa -in server.key -out server.key
+openssl req -sha256 -new -key server.key -out server.csr -subj "/CN=ENTER IP ADDRESS"
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+Under 1DT305_IoT_Project\Docker\mosquitto\cert, you can find the file make-keys-docker-compose.sl that your can run using Gitbash for similar software,
+but make sure to edit the variables according to your application.
+
+Move the necessary files to their respective location.
+
+#Delete this line when adding SSL
+allow_anonymous true
+listener 1883
+
+#Comment in this on when adding SSL
+#listener 8883
+#certfile /etc/mosquitto/mosquitto.crt
+#keyfile /etc/mosquitto/mosquitto.key
+
+persistence true
+persistence_location /mosquitto/data/
+
+plugin /usr/lib/mosquitto_dynamic_security.so
+plugin_opt_config_file /mosquitto/data/dynamic-security.json
+
+make sure to change the port in docker-compose.yml as well:
+
+  mosquitto:
+    image: eclipse-mosquitto:2-openssl
+    ports:
+      - 1883:1883
+      - 8883:8883 #SSL port, but don't open it for no reason
+    networks:
+      - IoT_1DT305
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
