@@ -8,7 +8,7 @@ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 Under 1DT305_IoT_Project\Docker\mosquitto\cert, you can find the file make-keys-docker-compose.sl that your can run using Gitbash for similar software,
 but make sure to edit the variables according to your application.
 
-Move the necessary files to their respective location.
+Move the necessary files (server crt and key) to their respective location
 
 #Delete this line when adding SSL
 allow_anonymous true
@@ -37,3 +37,49 @@ make sure to change the port in docker-compose.yml as well:
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
+
+import the files on the pico and to NodeRED volume to be able to connect to Mosquitto.
+
+copy this code in secrets.py
+  import ssl
+  
+  ca_cert_path = '/certs/ca.key'
+  user_cert_path = '/certs/client.key'
+  user_key_path = '/certs/server.key'
+  
+  with open(ca_cert_path, 'rb') as f:
+      ca_data = f.read()
+  print('Read CA Certificate... OK')
+  
+  with open(user_cert_path, 'rb') as f:
+      user_cert = f.read()
+  print('Read User Certificate... OK')
+  
+  with open(user_key_path, 'rb') as f:
+      user_key = f.read()
+  print('Read User Key... OK')
+
+  #inside the secrets = {
+    ...
+    SSL_PARAMS = {
+      'certfile': user_cert_path,
+      'keyfile': user_key_path,
+      'cadata': ca_data,
+      'server_hostname': self.broker,
+      'server_side': False,
+      'cert_reqs': ssl.CERT_REQUIRED,
+      'do_handshake': True
+    }
+  }
+
+and uncomment the commented parameters in MQTTHandler.py:
+
+  self.client = MQTTClient(client_id=self.client_id,
+                           server=self.broker,
+                           port=self.port,
+                           user=self.username,
+                           password=self.password,
+                           keepalive=secrets['MQTT_KEEPALIVE']
+                           #,ssl=True,
+                           #ssl_params=secrets['MQTT_SSL_PARAM']
+                           )
