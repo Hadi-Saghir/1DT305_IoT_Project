@@ -2,6 +2,7 @@ version: "3.6"
 services:
   mosquitto:
     image: eclipse-mosquitto:2-openssl
+    container_name: mosquitto
     ports:
       - 1883:1883
       - 8883:8883
@@ -14,6 +15,7 @@ services:
 
   management-center:
     image: cedalo/management-center:2
+    container_name: management-center
     ports:
       - 8088:8088
     depends_on:
