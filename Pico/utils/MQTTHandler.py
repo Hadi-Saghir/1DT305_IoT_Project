@@ -17,8 +17,8 @@ class MQTTHandler:
                                  user=self.username,
                                  password=self.password,
                                  keepalive=secrets['MQTT_KEEPALIVE']
-                                 #,ssl=True,
-                                 #ssl_params=secrets['MQTT_SSL_PARAM']
+                                 ,ssl=True,
+                                 ssl_params=secrets['MQTT_SSL_PARAM']
                                  )
         self.topics = topics
         self.message_handler = None
