@@ -3,15 +3,54 @@ import time
 
 class ActuatorHandler:
     def __init__(self):
-        self.led_pin = Pin("LED", Pin.OUT)  # Pico's built-in LED pin
+        self.red_pin = Pin(11, Pin.OUT)   # Pin 13 for red
+        self.green_pin = Pin(12, Pin.OUT) # Pin 12 for green
+        self.blue_pin = Pin(13, Pin.OUT)  # Pin 11 for blue
 
     def flash_led(self):
-        for _ in range(3):  # Flash the LED three times
-            self.led_pin.on()
-            time.sleep(0.5)
-            self.led_pin.off()
-            time.sleep(0.5)
+        self.flash_red()
+        self.flash_green()
+        self.flash_blue()
+
+    def flash_red(self):
+        self.red_pin.on()
+        time.sleep(0.5)
+        self.red_pin.off()
+
+    def flash_green(self):
+        self.green_pin.on()
+        time.sleep(0.5)
+        self.green_pin.off()
+
+    def flash_blue(self):
+        self.blue_pin.on()
+        time.sleep(0.5)
+        self.blue_pin.off()
 
     def turn_off_led(self):
-        self.led_pin.off()
-        
+        self.red_pin.off()
+        self.green_pin.off()
+        self.blue_pin.off()
+
+# Test
+while False:
+    actuator = ActuatorHandler()
+
+    print("Testing flash_red()")
+    actuator.flash_red()
+    time.sleep(1)
+
+    print("Testing flash_green()")
+    actuator.flash_green()
+    time.sleep(1)
+
+    print("Testing flash_blue()")
+    actuator.flash_blue()
+    time.sleep(1)
+
+    print("Testing flash_led()")
+    actuator.flash_led()
+    time.sleep(1)
+
+    actuator.turn_off_led()
+
