@@ -1,0 +1,28 @@
+## Admin Client
+Client with full access rights for use with Management Center.
+username: hadi
+password: Iminyourarea
+
+## Standard Client
+Client for use with Streamsheets and other services.
+The file "mqtt_connector_import.json" contains a preconfigured Connector using this client that can be imported into Streamsheets.
+username: hadi_client
+password: Iminyourarea
+
+!!!You can change them from mqtt_connector_import and docker-compose.yml!!!
+
+Open the browser and search localhost:8088.
+
+Login to Management center with the following credentials username: ‘hadi’ and password ‘Iminyourarea’
+
+Click ‘Client’ > ‘+ New Client’, fill the fields necessary, and create the new client
+
+Assign the client the role “client”
+
+Note down the following values:
+
+Information of the MQTT:
+    MQTT_BROKER: "ENTER SERVERS WIFI IPV4 ADDRESS"
+    MQTT_PORT: 1883
+    MQTT_USER: "ENTER USERNAME FOR THE NEW CLIENT"
+    MQTT_PASSWORD: "ENTER PASSWORD FOR THE NEW CLIENT"

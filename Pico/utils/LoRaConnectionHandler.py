@@ -28,29 +28,59 @@ class LoRaConnectionHandler:
             raise Exception("Failed to join LoRa modules after multiple tries.")
 
         print('LoRa connected')
-             
+
+    def check_connection(self):
+        if not self.lora.has_joined():
+            print("LoRa connection lost. Reconnecting...")
+            self.connect()
+            return True
         
         
-    def pub_sensor_values(self, client, topic, temperature, humidity):
-        # Create the message dictionary
-        message = {
-            "temperature": "{{temperature}}",
-            "humidity": "{{humidity}}"
-        }''
+    def pub_sensor_values(self, state, temperature, humidity):
+        state = state
+        temperature = temperature
+        humidity = humidity
 
-        # Fill in the dynamic values in the message template
-        message["temperature"] = temperature
-        message["humidity"] = humidity
+        """
+        Prepare data packing to send
+        Payload format is: >hBc where
+        h = Temperature         (2 bytes, 16 bits, signed)       Range: -32,768 to 32,767
+        B = Humidity            (1 byte,  8 bits,  unsigned)     Range: 0 to 255
+        c = State               (1 byte,  8 bits,  character)     Values: 'w' or 'b'
+        
+        """
+        max_tries = 3
 
-        # Convert the message to JSON
-        json_message = json.dumps(message)
+        for _ in range(max_tries):
+            try:
+                if not self.lora.has_joined():
+                    self.connect()
+                
+                package = struct.pack('>hBc', int(temperature), int(humidity), state.encode())
+                self.lora_sock.send(package)
+                print('Sensor data sent!')
+                break
+    
+            except Exception as e:
+                print('Error:', e)
+                time.sleep(15)
+    
+        else:
+            try:
+                self.lora_sock.close()
+                self.lora = None
+                self.lora_sock = None
 
-        # Send the JSON message using your desired method
-        # For example, you can publish it to an MQTT topic
-        try:
-            client.publish(topic=topic, msg=json_message)
-        except Exception as e:
-            print("publish failed")
-             # if WLAN.isConnected() use wifi
+                '''
+                Sadly, I imported MQTT to main, which I should have abstracted in WifiiConnectionHandler. Poor design choice due to ignorance that should be refactored.
+                
+                wifi_connection_handler = WiFiConnectionHandler()
+                wifi_connection_handler.connect()
+                wifi_connection_handler.pub_sensor_values(state, temperature, humidity)
+                '''
+    
+            except Exception as e:
+                print('Error:', e)
+
 
              

@@ -1,41 +1,27 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "6ad1a062e409bd44",
         "type": "tab",
         "label": "Flow 1",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "9e751e0b19fc2441",
-        "type": "mqtt-broker",
-        "name": "home",
-        "broker": "48d5fa5ca3de4dcdb4a60ae6194c8c08.s1.eu.hivemq.cloud",
-        "port": "8883",
+        "id": "630b892cba59f1fd",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "influxdata",
+        "usetls": false,
         "tls": "",
-        "clientid": "nodered",
-        "autoConnect": true,
-        "usetls": true,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
+        "influxdbVersion": "2.0",
+        "url": "http://influxdb:8086",
+        "rejectUnauthorized": false
     },
     {
-        "id": "0e365358d146b810",
+        "id": "d2b13fe36ec1d327",
         "type": "telegram bot",
         "botname": "LNU_Coffee_Bot",
         "usernames": "",
@@ -60,37 +46,36 @@
         "verboselogging": false
     },
     {
-        "id": "b4855121fec6b1a3",
-        "type": "influxdb",
-        "hostname": "127.0.0.1",
-        "port": "8086",
-        "protocol": "http",
-        "database": "database",
-        "name": "influxdata",
+        "id": "4623c356d3ed6d1a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mqtt://mosquitto",
+        "port": "1883",
+        "clientid": "hadsag",
+        "autoConnect": true,
         "usetls": false,
-        "tls": "",
-        "influxdbVersion": "2.0",
-        "url": "http://127.0.0.1:8086/",
-        "rejectUnauthorized": true
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     },
     {
-        "id": "9a2bd9f455822cd3",
-        "type": "influxdb",
-        "hostname": "127.0.0.1",
-        "port": "8086",
-        "protocol": "http",
-        "database": "database",
-        "name": "local",
-        "usetls": false,
-        "tls": "",
-        "influxdbVersion": "2.0",
-        "url": "http://localhost:8086",
-        "rejectUnauthorized": true
-    },
-    {
-        "id": "2af3fdd0cf10f500",
+        "id": "47d248576dee0d36",
         "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "brew/start",
         "topic": "brew/start",
         "qos": "2",
@@ -100,43 +85,15 @@
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "x": 600,
-        "y": 560,
+        "y": 580,
         "wires": []
     },
     {
-        "id": "0d7bd9697bf52552",
-        "type": "telegram command",
-        "z": "f6f2187d.f17ca8",
-        "name": "/start",
-        "command": "/start",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "0e365358d146b810",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 110,
-        "y": 280,
-        "wires": [
-            [
-                "65ef7740c7ff48d4",
-                "d4bbb542173b42fa"
-            ],
-            [
-                "0eb158b5f7c2d338"
-            ]
-        ]
-    },
-    {
-        "id": "65ef7740c7ff48d4",
+        "id": "2acd1bb194d2215d",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Welcome to the LNU Coffee Bot built by Hadi Saghir! To get started, type /help for some useful commands.\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -148,15 +105,15 @@
         "y": 280,
         "wires": [
             [
-                "37af0d9011123072",
-                "d4bbb542173b42fa"
+                "2e75ae89b7eb0105",
+                "87b097932eb7029a"
             ]
         ]
     },
     {
-        "id": "d4bbb542173b42fa",
+        "id": "87b097932eb7029a",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "Debug - Start",
         "active": false,
         "tosidebar": true,
@@ -171,53 +128,9 @@
         "wires": []
     },
     {
-        "id": "37af0d9011123072",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 560,
-        "y": 280,
-        "wires": [
-            [
-                "d4bbb542173b42fa"
-            ]
-        ]
-    },
-    {
-        "id": "07d44d7647e9dc20",
-        "type": "telegram command",
-        "z": "f6f2187d.f17ca8",
-        "name": "/help",
-        "command": "/help",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "0e365358d146b810",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 750,
-        "y": 280,
-        "wires": [
-            [
-                "fab189637eb17949",
-                "6b3a8d03092504c5"
-            ],
-            [
-                "56f839f38aa40da2"
-            ]
-        ]
-    },
-    {
-        "id": "fab189637eb17949",
+        "id": "7f18fb08934f41aa",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"The following commands are available:\\n\\n\" +\n        \"/brew  - Start brewing coffee instantly.\\n\" +\n        \"/brew schedule <time> - Schedule using time.\\n\" +\n        \"/brew timer <time> - Schedule using a preset timer.\\n\" +\n        \"/warm <time> - Keep warm for a certain amount of time.\\n\" +\n        \"/warm - Keep warm until instructed otherwise.\\n\" +\n        \"/off - turn coffee machine off.\\n\" +\n        \"/report brew - Generate a temperature report for coffee brew.\\n\" +\n        \"/report warm - Generate a temperature report for coffee warm.\"\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -229,15 +142,15 @@
         "y": 280,
         "wires": [
             [
-                "2692bdefe22f1606",
-                "6b3a8d03092504c5"
+                "a173966f2304fb43",
+                "95b9e8875f7916b4"
             ]
         ]
     },
     {
-        "id": "6b3a8d03092504c5",
+        "id": "95b9e8875f7916b4",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "Debug - help",
         "active": false,
         "tosidebar": true,
@@ -252,25 +165,9 @@
         "wires": []
     },
     {
-        "id": "2692bdefe22f1606",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 1200,
-        "y": 280,
-        "wires": [
-            [
-                "6b3a8d03092504c5"
-            ]
-        ]
-    },
-    {
-        "id": "0eb158b5f7c2d338",
+        "id": "912902990af68226",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "unauthorized",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Welcome to the LNU Coffee Bot. You currently don't have access to use commands. Please contact the owner to give you permission\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -282,14 +179,14 @@
         "y": 340,
         "wires": [
             [
-                "37af0d9011123072"
+                "2e75ae89b7eb0105"
             ]
         ]
     },
     {
-        "id": "56f839f38aa40da2",
+        "id": "58f3dea9a1c1ab73",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "unauthorized",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"You currently don't have access to use commands. Please contact the owner to give you permission\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -301,43 +198,14 @@
         "y": 340,
         "wires": [
             [
-                "2692bdefe22f1606"
+                "a173966f2304fb43"
             ]
         ]
     },
     {
-        "id": "397a5646f9729b70",
-        "type": "telegram command",
-        "z": "f6f2187d.f17ca8",
-        "name": "/brew",
-        "command": "/brew",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "0e365358d146b810",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 110,
-        "y": 960,
-        "wires": [
-            [
-                "4fbab07c7bfb791b",
-                "12032a5803e9a463",
-                "759f972e93bd9863"
-            ],
-            [
-                "05c6859988e8f5ad"
-            ]
-        ]
-    },
-    {
-        "id": "4fbab07c7bfb791b",
+        "id": "32def4e6fc2163a5",
         "type": "switch",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "1:now 2:schedule 3:timer",
         "property": "payload.content",
         "propertyType": "msg",
@@ -363,20 +231,20 @@
         "y": 680,
         "wires": [
             [
-                "2af3fdd0cf10f500"
+                "47d248576dee0d36"
             ],
             [
-                "52c5c52df83abef3"
+                "695e458460ce3374"
             ],
             [
-                "5bba1ffd35e4b3c1"
+                "d76586eab337e6f7"
             ]
         ]
     },
     {
-        "id": "05c6859988e8f5ad",
+        "id": "ec9c990ca5cb6ea4",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "unauthorized",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Welcome to the LNU Coffee Bot. You currently don't have access to use commands. Please contact the owner to give you permission\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -388,14 +256,14 @@
         "y": 1180,
         "wires": [
             [
-                "e4deb4f4a34d9587"
+                "ce068af3fca22e17"
             ]
         ]
     },
     {
-        "id": "80e62e314a10fb40",
+        "id": "6292b0062523e91b",
         "type": "delay",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "pauseType": "delayv",
         "timeout": "5",
@@ -413,14 +281,14 @@
         "y": 680,
         "wires": [
             [
-                "d0b79f29e380205c"
+                "5093c489b14a40d0"
             ]
         ]
     },
     {
-        "id": "52c5c52df83abef3",
+        "id": "695e458460ce3374",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "schedule",
         "func": "// Extract the time from the command\nvar command = msg.payload.content; // Assuming the command is in the content property\nvar time = '';\n\n// Check if the command is '/brew schedule'\nif (command.startsWith('/brew schedule')) {\n    // Extract the time after '/brew schedule'\n    time = command.replace('/brew schedule', '').trim();\n}\n\n// Set the delay in the msg.delay property\nif (time !== '') {\n    // Split the time into hours and minutes\n    var timeParts = time.split(':');\n    var hours = parseInt(timeParts[0]);\n    var minutes = parseInt(timeParts[1]);\n\n    // Calculate the delay in milliseconds\n    var currentDate = new Date();\n    var scheduledDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), hours, minutes);\n\n    // Schedule relative to the current time\n    var delay = scheduledDate.getTime() - currentDate.getTime();\n    if (delay < 0) {\n        delay += 24 * 60 * 60 * 1000; // Add 24 hours if the scheduled time has already passed\n    }\n\n    // Set the delay in the msg object\n    msg.delay = delay;\n    msg.commandType = 'schedule'; // Add a property to indicate the command type\n}\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -432,14 +300,14 @@
         "y": 640,
         "wires": [
             [
-                "80e62e314a10fb40"
+                "6292b0062523e91b"
             ]
         ]
     },
     {
-        "id": "5bba1ffd35e4b3c1",
+        "id": "d76586eab337e6f7",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "Timer",
         "func": "// Extract the time from the command\nvar command = msg.payload.content; // Assuming the command is in the content property\nvar time = '';\n\n// Check if the command is '/brew timer'\nif (command.startsWith('/brew timer')) {\n    // Extract the time after '/brew timer'\n    time = command.replace('/brew timer', '').trim();\n}\n\n// Set the delay in the msg.delay property\nif (time !== '') {\n    // Split the time into hours and minutes\n    var timeParts = time.split(':');\n    var hours = parseInt(timeParts[0]);\n    var minutes = parseInt(timeParts[1]);\n\n    // Calculate the delay in milliseconds\n    var delay = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000); // Calculate the delay in milliseconds\n\n    // Set the delay in the msg object\n    msg.delay = delay;\n    msg.commandType = 'timer'; // Add a property to indicate the command type\n}\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -451,14 +319,14 @@
         "y": 720,
         "wires": [
             [
-                "80e62e314a10fb40"
+                "6292b0062523e91b"
             ]
         ]
     },
     {
-        "id": "0fa6f25c97215ca7",
+        "id": "1c246cdc02722748",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Started Brewing!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -470,19 +338,19 @@
         "y": 1020,
         "wires": [
             [
-                "10f4b0831e16045d"
+                "da9f13eb77035ccb"
             ]
         ]
     },
     {
-        "id": "c396910cbcda3488",
+        "id": "f01bd882f8b62ba8",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "brew/started",
         "topic": "brew/started",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -491,14 +359,14 @@
         "y": 1060,
         "wires": [
             [
-                "98f4dcfafa2269db"
+                "ee34a2e73d55ec59"
             ]
         ]
     },
     {
-        "id": "d21e6602ac75690c",
+        "id": "78556b27a9450cc2",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "debug 2",
         "active": true,
         "tosidebar": true,
@@ -512,9 +380,9 @@
         "wires": []
     },
     {
-        "id": "12032a5803e9a463",
+        "id": "473e28f267e85ead",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "mode": "custom",
         "build": "array",
@@ -535,15 +403,15 @@
         "y": 1020,
         "wires": [
             [
-                "0fa6f25c97215ca7",
-                "d21e6602ac75690c"
+                "1c246cdc02722748",
+                "78556b27a9450cc2"
             ]
         ]
     },
     {
-        "id": "d0b79f29e380205c",
+        "id": "5093c489b14a40d0",
         "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "brew/start",
         "topic": "brew/start",
         "qos": "2",
@@ -553,34 +421,20 @@
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "x": 920,
         "y": 680,
         "wires": []
     },
     {
-        "id": "e4deb4f4a34d9587",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 440,
-        "y": 1180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "30849a0a493a932b",
+        "id": "a11e844eb085c5d1",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "brew/done",
         "topic": "brew/done",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -589,14 +443,14 @@
         "y": 800,
         "wires": [
             [
-                "77daa61799663551"
+                "310d1fd3012ad686"
             ]
         ]
     },
     {
-        "id": "759f972e93bd9863",
+        "id": "a68b83757fed6b47",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "mode": "custom",
         "build": "array",
@@ -617,15 +471,15 @@
         "y": 840,
         "wires": [
             [
-                "d4ef3a7547efc471",
-                "28c69d54c944fac7"
+                "db12c3d0257641bf",
+                "a90b7accd8adef8c"
             ]
         ]
     },
     {
-        "id": "d4ef3a7547efc471",
+        "id": "db12c3d0257641bf",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Coffee is ready! Enjoy!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -637,28 +491,14 @@
         "y": 840,
         "wires": [
             [
-                "10f4b0831e16045d"
+                "da9f13eb77035ccb"
             ]
         ]
     },
     {
-        "id": "10f4b0831e16045d",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 1040,
-        "y": 920,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "28c69d54c944fac7",
+        "id": "a90b7accd8adef8c",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "debug 3",
         "active": true,
         "tosidebar": true,
@@ -672,11 +512,11 @@
         "wires": []
     },
     {
-        "id": "402ce021d4ce7ba0",
+        "id": "af6e9ad6c9b44b42",
         "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "wam/start",
-        "topic": "wam/start",
+        "topic": "warm/start",
         "qos": "2",
         "retain": "true",
         "respTopic": "",
@@ -684,17 +524,17 @@
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "x": 320,
         "y": 1360,
         "wires": []
     },
     {
-        "id": "1bb6a9dedb160b96",
+        "id": "f00ae95e008ad306",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
-        "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Started Brewing!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
+        "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Warm process started!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -704,43 +544,14 @@
         "y": 1500,
         "wires": [
             [
-                "fe7bb92e4b0b2a0a"
+                "88e6d750577306a3"
             ]
         ]
     },
     {
-        "id": "788bbbdca80f19f9",
-        "type": "telegram command",
-        "z": "f6f2187d.f17ca8",
-        "name": "/warm",
-        "command": "/warm",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "0e365358d146b810",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 130,
-        "y": 1620,
-        "wires": [
-            [
-                "402ce021d4ce7ba0",
-                "eb18603d97998e09",
-                "f2ea9b252ce4755c"
-            ],
-            [
-                "9c3f846dc6b6e7f8"
-            ]
-        ]
-    },
-    {
-        "id": "9c3f846dc6b6e7f8",
+        "id": "5a3ecf8aaba18a2d",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "unauthorized",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Welcome to the LNU Coffee Bot. You currently don't have access to use commands. Please contact the owner to give you permission\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -752,19 +563,19 @@
         "y": 1860,
         "wires": [
             [
-                "337a19e93661ac49"
+                "283b0c4b9d8c1cdf"
             ]
         ]
     },
     {
-        "id": "abb94b899358f2c2",
+        "id": "3b581c4ee7ab15b4",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "wam/started",
-        "topic": "wam/started",
+        "topic": "warm/started",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -773,14 +584,14 @@
         "y": 1460,
         "wires": [
             [
-                "d307f6b8a37e661d"
+                "a1878128f4544fd8"
             ]
         ]
     },
     {
-        "id": "0990c24902884b35",
+        "id": "ba137ba10ec0d2c5",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "debug 4",
         "active": true,
         "tosidebar": true,
@@ -794,9 +605,9 @@
         "wires": []
     },
     {
-        "id": "f2ea9b252ce4755c",
+        "id": "4c57d022bd600fb1",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "mode": "custom",
         "build": "array",
@@ -817,34 +628,20 @@
         "y": 1500,
         "wires": [
             [
-                "1bb6a9dedb160b96",
-                "0990c24902884b35"
+                "f00ae95e008ad306",
+                "ba137ba10ec0d2c5"
             ]
         ]
     },
     {
-        "id": "337a19e93661ac49",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 480,
-        "y": 1860,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "702bb955ea2c3352",
+        "id": "752eabfc792da949",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "wam/done",
-        "topic": "wam/done",
+        "topic": "warm/done",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -853,14 +650,14 @@
         "y": 1760,
         "wires": [
             [
-                "4d1d3976a7e830e1"
+                "04406cf316e9b7c9"
             ]
         ]
     },
     {
-        "id": "eb18603d97998e09",
+        "id": "ccc672b043e8d705",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "mode": "auto",
         "build": "object",
@@ -877,17 +674,17 @@
         "y": 1700,
         "wires": [
             [
-                "21b57e0309724d9f",
-                "02f774f71ee7d802"
+                "c2255d49b107d583",
+                "1e1816ecec82400c"
             ]
         ]
     },
     {
-        "id": "21b57e0309724d9f",
+        "id": "c2255d49b107d583",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
-        "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Started Brewing!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
+        "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Warm process done!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -897,28 +694,14 @@
         "y": 1700,
         "wires": [
             [
-                "fe7bb92e4b0b2a0a"
+                "88e6d750577306a3"
             ]
         ]
     },
     {
-        "id": "fe7bb92e4b0b2a0a",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 1040,
-        "y": 1600,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "02f774f71ee7d802",
+        "id": "1e1816ecec82400c",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "debug 6",
         "active": true,
         "tosidebar": true,
@@ -932,9 +715,9 @@
         "wires": []
     },
     {
-        "id": "98f4dcfafa2269db",
+        "id": "ee34a2e73d55ec59",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "field": "complete",
         "fieldType": "msg",
@@ -946,14 +729,14 @@
         "y": 1060,
         "wires": [
             [
-                "12032a5803e9a463"
+                "473e28f267e85ead"
             ]
         ]
     },
     {
-        "id": "77daa61799663551",
+        "id": "310d1fd3012ad686",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "field": "complete",
         "fieldType": "msg",
@@ -965,14 +748,14 @@
         "y": 800,
         "wires": [
             [
-                "759f972e93bd9863"
+                "a68b83757fed6b47"
             ]
         ]
     },
     {
-        "id": "d307f6b8a37e661d",
+        "id": "a1878128f4544fd8",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "field": "complete",
         "fieldType": "msg",
@@ -984,14 +767,14 @@
         "y": 1460,
         "wires": [
             [
-                "f2ea9b252ce4755c"
+                "4c57d022bd600fb1"
             ]
         ]
     },
     {
-        "id": "4d1d3976a7e830e1",
+        "id": "04406cf316e9b7c9",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "field": "complete",
         "fieldType": "msg",
@@ -1003,42 +786,14 @@
         "y": 1760,
         "wires": [
             [
-                "eb18603d97998e09"
+                "ccc672b043e8d705"
             ]
         ]
     },
     {
-        "id": "085df299c2ed9523",
-        "type": "telegram command",
-        "z": "f6f2187d.f17ca8",
-        "name": "/off",
-        "command": "/off",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "0e365358d146b810",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 130,
-        "y": 2160,
-        "wires": [
-            [
-                "fbf9b78f26af90d4",
-                "4777cf037aa25bb6"
-            ],
-            [
-                "fcc6e41c69af540a"
-            ]
-        ]
-    },
-    {
-        "id": "b26bce9d94ca5159",
+        "id": "f9366fb95c3e9d1a",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"The coffee machine is now off!\"\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -1050,28 +805,14 @@
         "y": 2120,
         "wires": [
             [
-                "ed05ded729ec61e0"
+                "e712da9e8967fbcf"
             ]
         ]
     },
     {
-        "id": "ed05ded729ec61e0",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 1000,
-        "y": 2120,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fcc6e41c69af540a",
+        "id": "30c8fb753e32b849",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "unauthorized",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Welcome to the LNU Coffee Bot. You currently don't have access to use commands. Please contact the owner to give you permission\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -1083,14 +824,14 @@
         "y": 2240,
         "wires": [
             [
-                "ed05ded729ec61e0"
+                "e712da9e8967fbcf"
             ]
         ]
     },
     {
-        "id": "fbf9b78f26af90d4",
+        "id": "3103e545bdc1c912",
         "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "off/start",
         "topic": "off/start",
         "qos": "2",
@@ -1100,20 +841,20 @@
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "x": 320,
         "y": 2000,
         "wires": []
     },
     {
-        "id": "b9f41b6ff99be453",
+        "id": "60933a1b80109533",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "off/done",
         "topic": "off/done",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -1122,14 +863,14 @@
         "y": 2080,
         "wires": [
             [
-                "821a72d476a385b2"
+                "5458562c9060d38a"
             ]
         ]
     },
     {
-        "id": "4777cf037aa25bb6",
+        "id": "b2b4e0bff62cbf87",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "mode": "custom",
         "build": "array",
@@ -1150,14 +891,14 @@
         "y": 2120,
         "wires": [
             [
-                "b26bce9d94ca5159"
+                "f9366fb95c3e9d1a"
             ]
         ]
     },
     {
-        "id": "821a72d476a385b2",
+        "id": "5458562c9060d38a",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "field": "complete",
         "fieldType": "msg",
@@ -1169,19 +910,19 @@
         "y": 2080,
         "wires": [
             [
-                "4777cf037aa25bb6"
+                "b2b4e0bff62cbf87"
             ]
         ]
     },
     {
-        "id": "6df7b8f885f780ad",
+        "id": "a4a5d81824b867f5",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "brew/done/sensor/temp",
         "topic": "brew/done/sensor/temp",
-        "qos": "2",
+        "qos": "1",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -1190,19 +931,20 @@
         "y": 2760,
         "wires": [
             [
-                "7c72a58e91db971d"
+                "c50d702fba17dac3",
+                "041adf979779f0d9"
             ]
         ]
     },
     {
-        "id": "1f5b3a62238f4616",
+        "id": "9472219857b88852",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "warm/sensor/temp",
         "topic": "warm/sensor/temp",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -1211,79 +953,15 @@
         "y": 2840,
         "wires": [
             [
-                "b0d8e0b5e63ea85e"
+                "bd6c402ed91d26d8",
+                "041adf979779f0d9"
             ]
         ]
     },
     {
-        "id": "e9c9c29706d446f0",
-        "type": "influxdb in",
-        "z": "f6f2187d.f17ca8",
-        "influxdb": "b4855121fec6b1a3",
-        "name": "GET",
-        "query": "",
-        "rawOutput": false,
-        "precision": "",
-        "retentionPolicy": "",
-        "org": "hadsag",
-        "x": 690,
-        "y": 2320,
-        "wires": [
-            [
-                "8ca0ac6cab571596"
-            ]
-        ]
-    },
-    {
-        "id": "7c72a58e91db971d",
-        "type": "influxdb out",
-        "z": "f6f2187d.f17ca8",
-        "influxdb": "9a2bd9f455822cd3",
-        "name": "brew",
-        "measurement": "temp",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "s",
-        "retentionPolicyV18Flux": "",
-        "org": "hadsag",
-        "bucket": "brew",
-        "x": 450,
-        "y": 2760,
-        "wires": []
-    },
-    {
-        "id": "1c7ea6c9566cd388",
-        "type": "telegram command",
-        "z": "f6f2187d.f17ca8",
-        "name": "/report",
-        "command": "/report",
-        "description": "",
-        "registercommand": false,
-        "language": "",
-        "scope": "default",
-        "bot": "0e365358d146b810",
-        "strict": false,
-        "hasresponse": true,
-        "useregex": false,
-        "removeregexcommand": false,
-        "outputs": 2,
-        "x": 130,
-        "y": 2480,
-        "wires": [
-            [
-                "0e6e3881c0bbb5fb",
-                "d0e940789dbcbe22"
-            ],
-            [
-                "b72e5e896b73a687"
-            ]
-        ]
-    },
-    {
-        "id": "b72e5e896b73a687",
+        "id": "136a191a479e148a",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "unauthorized",
         "func": "// Extract the chat ID and message ID from the incoming message\nvar chatId = msg.payload.chatId;\nvar messageId = msg.payload.messageId;\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: \"Welcome to the LNU Coffee Bot. You currently don't have access to use commands. Please contact the owner to give you permission\"\n\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -1295,28 +973,14 @@
         "y": 2580,
         "wires": [
             [
-                "722726bb61796773"
+                "7aac80dd60d6446d"
             ]
         ]
     },
     {
-        "id": "722726bb61796773",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 480,
-        "y": 2580,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "0e6e3881c0bbb5fb",
+        "id": "979f8c6d0a8fed2a",
         "type": "switch",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "1:brew 2:warm",
         "property": "payload.content",
         "propertyType": "msg",
@@ -1339,19 +1003,19 @@
         "y": 2340,
         "wires": [
             [
-                "c48741a9686f51a8"
+                "67b0eaa15917057a"
             ],
             [
-                "42be5a942729fa8b"
+                "0662755d868a554e"
             ]
         ]
     },
     {
-        "id": "a097a93c15dc2b4d",
+        "id": "c38fe13b1b60503e",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "format response",
-        "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Get the data array from the payload\nvar data = msg.payload[1].payload;\n\n// Create a variable to store the text format\nvar textFormat = \"\";\n\n// Calculate the average\nvar sum = 0;\nvar count = data.length;\n\nfor (var i = 0; i < count; i++) {\n    var value = data[i]._value;\n    sum += value;\n    textFormat += \"Measurement \" + (i + 1) + \": \" + value + \"\\n\";\n}\n\nvar average = sum / count;\n\n// Append the average to the text format\ntextFormat += \"\\nAverage: \" + average.toFixed(2);\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: textFormat\n};\n\n// Return the modified message object\nreturn msg;\n",
+        "func": "// Extract the chat ID and message ID from the incoming message\nvar telegramMessage = msg.payload[0];\n\nvar chatId = telegramMessage.payload.chatId;\nvar messageId = telegramMessage.payload.messageId;\n\n// Get the data array from the payload\nvar data = msg.payload[1].payload;\n\n// Create a variable to store the text format\nvar textFormat = \"\";\n\n// Calculate the average\nvar sum = 0;\nvar count = data.length;\n\nfor (var i = 0; i < 50; i++) {\n    var value = data[i]._value;\n    sum += value;\n    textFormat += \"Measurement: \" + value + \"\\n\";\n}\n\nvar average = sum / count;\n\n// Append the average to the text format\ntextFormat += \"\\nAverage: \" + average.toFixed(2);\n\n// Create a new message payload with the extracted chat ID, message ID, and text\nmsg.payload = {\n    chatId: chatId,\n    sentMessageId: messageId,\n    type: \"message\",\n    content: textFormat\n};\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1361,33 +1025,19 @@
         "y": 2480,
         "wires": [
             [
-                "96509b98c3d40364"
+                "3a71c2010e9d412f"
             ]
         ]
     },
     {
-        "id": "96509b98c3d40364",
-        "type": "telegram sender",
-        "z": "f6f2187d.f17ca8",
-        "name": "send res",
-        "bot": "0e365358d146b810",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 1020,
-        "y": 2480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "45a9d52966e572f2",
+        "id": "dbaf87357f6fcd51",
         "type": "mqtt in",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "warm/sensor/humid",
         "topic": "warm/sensor/humid",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "9e751e0b19fc2441",
+        "broker": "4623c356d3ed6d1a",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -1396,69 +1046,34 @@
         "y": 2920,
         "wires": [
             [
-                "74c3f9a3a2f90bd5"
+                "0f52da64cac47fad",
+                "041adf979779f0d9"
             ]
         ]
     },
     {
-        "id": "b0d8e0b5e63ea85e",
-        "type": "influxdb out",
-        "z": "f6f2187d.f17ca8",
-        "influxdb": "b4855121fec6b1a3",
-        "name": "warm/temp",
-        "measurement": "temp",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "s",
-        "retentionPolicyV18Flux": "",
-        "org": "hadsag",
-        "bucket": "warm",
-        "x": 470,
-        "y": 2840,
-        "wires": []
-    },
-    {
-        "id": "74c3f9a3a2f90bd5",
-        "type": "influxdb out",
-        "z": "f6f2187d.f17ca8",
-        "influxdb": "b4855121fec6b1a3",
-        "name": "warm/humid",
-        "measurement": "humid",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "s",
-        "retentionPolicyV18Flux": "",
-        "org": "hadsag",
-        "bucket": "warm",
-        "x": 470,
-        "y": 2920,
-        "wires": []
-    },
-    {
-        "id": "c48741a9686f51a8",
+        "id": "67b0eaa15917057a",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "brew",
         "field": "query",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "from(bucket: \"brew\")\n  |> range(start: 0)\n  |> filter(fn: (r) => r._measurement == \"temp\")\n\n",
+        "template": "from(bucket: \"warm\")\n  |> range(start: 0)\n  |> filter(fn: (r) => r._measurement == \"temp\")",
         "output": "str",
         "x": 490,
         "y": 2300,
         "wires": [
             [
-                "e9c9c29706d446f0"
+                "c74a6e622e3660b1"
             ]
         ]
     },
     {
-        "id": "d0e940789dbcbe22",
+        "id": "fbc5f2b538ef476f",
         "type": "join",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "",
         "mode": "custom",
         "build": "array",
@@ -1479,15 +1094,15 @@
         "y": 2480,
         "wires": [
             [
-                "a097a93c15dc2b4d",
-                "5bbbe90e7cd71adb"
+                "c38fe13b1b60503e",
+                "084cb569da86524c"
             ]
         ]
     },
     {
-        "id": "8ca0ac6cab571596",
+        "id": "c4a33edcc2df8414",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "function 1",
         "func": "// Store the result of the InfluxDB query in a variable\nvar influxResult = msg.payload;\n\n\n// Combine the result with msg.complete\nmsg.payload = influxResult;\nmsg.complete = 1;\n\n// Return the modified message object\nreturn msg;\n",
         "outputs": 1,
@@ -1499,14 +1114,14 @@
         "y": 2320,
         "wires": [
             [
-                "d0e940789dbcbe22"
+                "fbc5f2b538ef476f"
             ]
         ]
     },
     {
-        "id": "5bbbe90e7cd71adb",
+        "id": "084cb569da86524c",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "debug - report",
         "active": true,
         "tosidebar": true,
@@ -1521,9 +1136,9 @@
         "wires": []
     },
     {
-        "id": "42be5a942729fa8b",
+        "id": "0662755d868a554e",
         "type": "template",
-        "z": "f6f2187d.f17ca8",
+        "z": "6ad1a062e409bd44",
         "name": "warm",
         "field": "query",
         "fieldType": "msg",
@@ -1535,8 +1150,397 @@
         "y": 2360,
         "wires": [
             [
-                "e9c9c29706d446f0"
+                "c74a6e622e3660b1"
             ]
         ]
+    },
+    {
+        "id": "c50d702fba17dac3",
+        "type": "influxdb out",
+        "z": "6ad1a062e409bd44",
+        "influxdb": "630b892cba59f1fd",
+        "name": "brew",
+        "measurement": "temp",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "hadsag",
+        "bucket": "brew",
+        "x": 450,
+        "y": 2760,
+        "wires": []
+    },
+    {
+        "id": "bd6c402ed91d26d8",
+        "type": "influxdb out",
+        "z": "6ad1a062e409bd44",
+        "influxdb": "630b892cba59f1fd",
+        "name": "warm/temp",
+        "measurement": "temp",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "hadsag",
+        "bucket": "warm",
+        "x": 470,
+        "y": 2840,
+        "wires": []
+    },
+    {
+        "id": "0f52da64cac47fad",
+        "type": "influxdb out",
+        "z": "6ad1a062e409bd44",
+        "influxdb": "630b892cba59f1fd",
+        "name": "warm/humid",
+        "measurement": "humid",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "hadsag",
+        "bucket": "warm",
+        "x": 470,
+        "y": 2920,
+        "wires": []
+    },
+    {
+        "id": "c74a6e622e3660b1",
+        "type": "influxdb in",
+        "z": "6ad1a062e409bd44",
+        "influxdb": "630b892cba59f1fd",
+        "name": "GET",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "hadsag",
+        "x": 690,
+        "y": 2320,
+        "wires": [
+            [
+                "c4a33edcc2df8414"
+            ]
+        ]
+    },
+    {
+        "id": "4fcbb05e964faa4d",
+        "type": "telegram command",
+        "z": "6ad1a062e409bd44",
+        "name": "/start",
+        "command": "/start",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d2b13fe36ec1d327",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "2acd1bb194d2215d",
+                "87b097932eb7029a"
+            ],
+            [
+                "912902990af68226"
+            ]
+        ]
+    },
+    {
+        "id": "4bb1efd0d60208f0",
+        "type": "telegram command",
+        "z": "6ad1a062e409bd44",
+        "name": "/help",
+        "command": "/help",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d2b13fe36ec1d327",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 750,
+        "y": 280,
+        "wires": [
+            [
+                "7f18fb08934f41aa",
+                "95b9e8875f7916b4"
+            ],
+            [
+                "58f3dea9a1c1ab73"
+            ]
+        ]
+    },
+    {
+        "id": "674992989044fb6d",
+        "type": "telegram command",
+        "z": "6ad1a062e409bd44",
+        "name": "/brew",
+        "command": "/brew",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d2b13fe36ec1d327",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 110,
+        "y": 960,
+        "wires": [
+            [
+                "32def4e6fc2163a5",
+                "473e28f267e85ead",
+                "a68b83757fed6b47"
+            ],
+            [
+                "ec9c990ca5cb6ea4"
+            ]
+        ]
+    },
+    {
+        "id": "8f8449e28deaae0c",
+        "type": "telegram command",
+        "z": "6ad1a062e409bd44",
+        "name": "/warm",
+        "command": "/warm",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d2b13fe36ec1d327",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 130,
+        "y": 1620,
+        "wires": [
+            [
+                "af6e9ad6c9b44b42",
+                "ccc672b043e8d705",
+                "4c57d022bd600fb1"
+            ],
+            [
+                "5a3ecf8aaba18a2d"
+            ]
+        ]
+    },
+    {
+        "id": "837d23dfca4b2b5e",
+        "type": "telegram command",
+        "z": "6ad1a062e409bd44",
+        "name": "/off",
+        "command": "/off",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d2b13fe36ec1d327",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 130,
+        "y": 2160,
+        "wires": [
+            [
+                "3103e545bdc1c912",
+                "b2b4e0bff62cbf87"
+            ],
+            [
+                "30c8fb753e32b849"
+            ]
+        ]
+    },
+    {
+        "id": "f60fb9b497756064",
+        "type": "telegram command",
+        "z": "6ad1a062e409bd44",
+        "name": "/report",
+        "command": "/report",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "d2b13fe36ec1d327",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 130,
+        "y": 2480,
+        "wires": [
+            [
+                "979f8c6d0a8fed2a",
+                "fbc5f2b538ef476f"
+            ],
+            [
+                "136a191a479e148a"
+            ]
+        ]
+    },
+    {
+        "id": "2e75ae89b7eb0105",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 560,
+        "y": 280,
+        "wires": [
+            [
+                "87b097932eb7029a"
+            ]
+        ]
+    },
+    {
+        "id": "a173966f2304fb43",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1200,
+        "y": 280,
+        "wires": [
+            [
+                "95b9e8875f7916b4"
+            ]
+        ]
+    },
+    {
+        "id": "ce068af3fca22e17",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 440,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "da9f13eb77035ccb",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1040,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "283b0c4b9d8c1cdf",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 480,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "88e6d750577306a3",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1040,
+        "y": 1600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e712da9e8967fbcf",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1000,
+        "y": 2120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7aac80dd60d6446d",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 480,
+        "y": 2580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a71c2010e9d412f",
+        "type": "telegram sender",
+        "z": "6ad1a062e409bd44",
+        "name": "send res",
+        "bot": "d2b13fe36ec1d327",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1020,
+        "y": 2480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "041adf979779f0d9",
+        "type": "debug",
+        "z": "6ad1a062e409bd44",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 3040,
+        "wires": []
     }
 ]

@@ -1,28 +1,85 @@
-## Admin Client
-Client with full access rights for use with Management Center.
-username: hadi
-password: Iminyourarea
+I configured SSL certificate using OpenSSL. Please read more on their website and visit the binaries (https://www.openssl.org/) to download the appropiate version
 
-## Standard Client
-Client for use with Streamsheets and other services.
-The file "mqtt_connector_import.json" contains a preconfigured Connector using this client that can be imported into Streamsheets.
-username: hadi_client
-password: Iminyourarea
+openssl genrsa -des3 -out server.key 2048
+openssl rsa -in server.key -out server.key
+openssl req -sha256 -new -key server.key -out server.csr -subj "/CN=ENTER IP ADDRESS"
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
-!!!You can change them from mqtt_connector_import and docker-compose.yml!!!
+Under 1DT305_IoT_Project\Docker\mosquitto\cert, you can find the file make-keys-docker-compose.sl that your can run using Gitbash for similar software,
+but make sure to edit the variables according to your application.
 
-Open the browser and search localhost:8088.
+Move the necessary files (server crt and key) to their respective location
 
-Login to Management center with the following credentials username: ‘hadi’ and password ‘Iminyourarea’
+#Delete this line when adding SSL
+allow_anonymous true
+listener 1883
 
-Click ‘Client’ > ‘+ New Client’, fill the fields necessary, and create the new client
+#Comment in this on when adding SSL
+#listener 8883
+#certfile /etc/mosquitto/mosquitto.crt
+#keyfile /etc/mosquitto/mosquitto.key
 
-Assign the client the role “client”
+persistence true
+persistence_location /mosquitto/data/
 
-Note down the following values:
+plugin /usr/lib/mosquitto_dynamic_security.so
+plugin_opt_config_file /mosquitto/data/dynamic-security.json
 
-Information of the MQTT:
-    MQTT_BROKER: "ENTER SERVERS WIFI IPV4 ADDRESS"
-    MQTT_PORT: 1883
-    MQTT_USER: "ENTER USERNAME FOR THE NEW CLIENT"
-    MQTT_PASSWORD: "ENTER PASSWORD FOR THE NEW CLIENT"
+make sure to change the port in docker-compose.yml as well:
+
+  mosquitto:
+    image: eclipse-mosquitto:2-openssl
+    ports:
+      - 1883:1883 # close this port, if unnecessary
+      - 8883:8883 #SSL port, but don't open it for no reason
+    networks:
+      - IoT_1DT305
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+
+import the files on the pico and to NodeRED volume to be able to connect to Mosquitto.
+
+copy this code in secrets.py
+  import ssl
+  
+  ca_cert_path = '/certs/ca.key'
+  user_cert_path = '/certs/client.key'
+  user_key_path = '/certs/server.key'
+  
+  with open(ca_cert_path, 'rb') as f:
+      ca_data = f.read()
+  print('Read CA Certificate... OK')
+  
+  with open(user_cert_path, 'rb') as f:
+      user_cert = f.read()
+  print('Read User Certificate... OK')
+  
+  with open(user_key_path, 'rb') as f:
+      user_key = f.read()
+  print('Read User Key... OK')
+
+  #inside the secrets = {
+    ...
+    SSL_PARAMS = {
+      'certfile': user_cert_path,
+      'keyfile': user_key_path,
+      'cadata': ca_data,
+      'server_hostname': self.broker,
+      'server_side': False,
+      'cert_reqs': ssl.CERT_REQUIRED,
+      'do_handshake': True
+    }
+  }
+
+and uncomment the commented parameters in MQTTHandler.py:
+
+  self.client = MQTTClient(client_id=self.client_id,
+                           server=self.broker,
+                           port=self.port,
+                           user=self.username,
+                           password=self.password,
+                           keepalive=secrets['MQTT_KEEPALIVE']
+                           #,ssl=True,
+                           #ssl_params=secrets['MQTT_SSL_PARAM']
+                           )

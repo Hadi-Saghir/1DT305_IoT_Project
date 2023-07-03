@@ -10,7 +10,6 @@ class Sensor:
 class SensorHandler:
     def __init__(self):
         self.dh11_pin = Pin(21, Pin.IN)
-        self.vibration_pin = Pin(26, Pin.IN)
         self.photo_resistor_pin = ADC(Pin(27))
 
     def read(self, sensor):
@@ -21,52 +20,47 @@ class SensorHandler:
             humidity = d.humidity()
             return (temperature, humidity)
         
-        elif sensor == Sensor.VIBRATION:
-            vibration_state = self.vibration_pin.value()
-            return vibration_state
-        
         elif sensor == Sensor.PHOTO_RESISTOR:
             light = self.photo_resistor_pin.read_u16()
             darkness = round(light / 65535 * 100, 2)
             return darkness
         
-    def isCoffeeOn():
-        num_readings = 6
-        threshold_low = 1.0
-        threshold_high = 2.5
-        readings = []
-        outlier_ignored = False
+    def is_outlier(self, value, threshold_low, threshold_high):
+        return value < threshold_low or value > threshold_high
+
+    def isCoffeeOn(self):
+        num_values = 10
+        num_outliers = 0
+        outlier_threshold_low = 1.0
+        outlier_threshold_high = 2.5
         
-        for _ in range(num_readings):
-            darkness = self.sen.read(Sensor.PHOTO_RESISTOR)
+        for _ in range(num_values):
+            darkness = self.read(Sensor.PHOTO_RESISTOR)  # Replace with your sensor reading function
             
-            # Ignore outlier once every num_readings readings
-            if not outlier_ignored and (darkness < threshold_low or darkness > threshold_high):
-                outlier_ignored = True
-                continue
+            if self.is_outlier(darkness, outlier_threshold_low, outlier_threshold_high):
+                num_outliers += 1
             
-            readings.append(darkness)
-            
-            if len(readings) == num_readings:
-                average = sum(readings) / num_readings
-                
-                return threshold_low <= average <= threshold_high       
+            if num_outliers >= 3:
+                break
+        
+        return num_outliers < 3
+
+# Test photo resistor
+while False:
+    sens = SensorHandler()
+    coffee_on = sens.isCoffeeOn()
+    print("Is coffee on?", coffee_on)
+    time.sleep(1)
 
 
-
+# Test sensors
 while False:
     sen = SensorHandler()
     temperature, humidity = sen.read(Sensor.DH11)
-    vibration = sen.read(Sensor.VIBRATION)
     darkness = sen.read(Sensor.PHOTO_RESISTOR)
     
     print("Temperature:", temperature)
     print("Humidity:", humidity)
-    print("Vibration:", vibration)
-    if vibration == 1:
-        print("No vibration...")
-    else:
-        print("Vibration detected...")
     print("Darkness:", darkness)
     print()
     
