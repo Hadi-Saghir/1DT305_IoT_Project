@@ -26,14 +26,10 @@ services:
       CEDALO_MC_BROKER_ID: mosquitto-2.0
       CEDALO_MC_BROKER_NAME: Mosquitto 2.0
       CEDALO_MC_BROKER_URL: mqtt://mosquitto:1883
-      CEDALO_MC_BROKER_USERNAME: hadi
-      CEDALO_MC_BROKER_PASSWORD: Iminyourarea
+      CEDALO_MC_BROKER_USERNAME: hadsag
+      CEDALO_MC_BROKER_PASSWORD: Testuser1
       CEDALO_MC_USERNAME: hadi
       CEDALO_MC_PASSWORD: Iminyourarea
-      CEDALO_STREAMSHEETS_ID: streamsheets-local
-      CEDALO_STREAMSHEETS_NAME: Streamsheets
-      CEDALO_STREAMSHEETS_DESCRIPTION: Local Streamsheets
-      CEDALO_STREAMSHEETS_URL: http://localhost:8081
 
   influxdb:
     image: influxdb:latest

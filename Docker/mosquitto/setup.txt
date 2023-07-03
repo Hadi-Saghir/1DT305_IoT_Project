@@ -10,14 +10,14 @@ but make sure to edit the variables according to your application.
 
 Move the necessary files (server crt and key) to their respective location
 
-#Delete this line when adding SSL
+#Reg
 allow_anonymous true
 listener 1883
 
-#Comment in this on when adding SSL
-#listener 8883
-#certfile /etc/mosquitto/mosquitto.crt
-#keyfile /etc/mosquitto/mosquitto.key
+#SSL
+listener 8883
+certfile /etc/mosquitto/mosquitto.crt
+keyfile /etc/mosquitto/mosquitto.key
 
 persistence true
 persistence_location /mosquitto/data/
