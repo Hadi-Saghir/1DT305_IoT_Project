@@ -9,6 +9,7 @@ services:
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
+      - ./certs:/certs:ro
 
   management-center:
     image: cedalo/management-center:2
