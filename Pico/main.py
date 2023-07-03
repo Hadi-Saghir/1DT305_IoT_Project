@@ -3,7 +3,7 @@ import json
 import re
 from secrets import secrets
 from utils.WiFiConnectionHandler import ConnectionHandler
-#from utils.LoRaConnectionHandler import LoRaConnectionHandler
+#from utils.LoRaConnectionHandler import LoRaCon
 from utils.MQTTHandler import MQTTHandler
 from utils.SensorHandler import SensorHandler
 from utils.SensorHandler import Sensor
@@ -12,8 +12,8 @@ from utils.ActuatorHandler import ActuatorHandler
 class Machine:
     def __init__(self):
         self.connection_handler = ConnectionHandler()
-        self.connection_handler.connect()
-        self.mqtt_handler = MQTTHandler(["brew/start", "warm/start"])
+        self.connection_handler.connect_to_wifi()
+        self.mqtt_handler = MQTTHandler([b'brew/start', b'warm/start'])
         self.mqtt_handler.connect_to_mqtt()
         self.sensor_handler = SensorHandler()
         self.actuator_handler = ActuatorHandler()
@@ -23,7 +23,7 @@ class Machine:
         self.command_received = False
 
         #LoRaWan
-        #self.lora = LoRaConnectionHandler()
+        #self.lora = LoRaCon()
         #self.lora.connect()
         
         
@@ -38,7 +38,7 @@ class Machine:
             duration = data["content"].strip()
             print(duration)
             if self.validate_duration(duration):
-                self.mqtt_handler.publish_message("warm/started", "Warm process started")
+                self.mqtt_handler.publish_message(b'warm/started', "Warm process started")
                 self.run_warm_process(duration)
             else:
                 print("Invalid duration format. Expected format: HH:MM")
@@ -58,41 +58,41 @@ class Machine:
         while time.time() < end_time:
             #Measure data and report to cloud for warm report
             temperature, humidity = self.sensor_handler.read(Sensor.DH11)
-            #self.lora.pub_sensor_values("w", temperature, humidity)
             self.mqtt_handler.publish_message(b'warm/sensor/temp', str(temperature))
             self.mqtt_handler.publish_message(b'warm/sensor/humid', str(humidity))
+                    
+
 
             #Turn on coffee machine if on
             if not self.sensor_handler.isCoffeeOn():
-                print("Coffee machine turning on")
-                self.actuator_handler.flash_led()
+                self.actuator_handler.flash_blue()
+                self.actuator_handler.flash_green()
 
             time.sleep(15)
             
         #Turn off coffee machine
         if self.sensor_handler.isCoffeeOn():
-            print("Coffee machine turning off")
-            self.actuator_handler.flash_led()
+            self.actuator_handler.flash_blue()
+            self.actuator_handler.flash_red()
             
     def brewing(self):
         #Turn on coffee machine
         if not self.sensor_handler.isCoffeeOn():
-            print("Coffee machine turning on")
-            self.actuator_handler.flash_led()
+            self.actuator_handler.flash_blue()
+            self.actuator_handler.flash_green()
                 
         #Wait for the brewing process
         time.sleep(15)
         
         #Measure data and report to cloud for brew report
         temperature, humidity = self.sensor_handler.read(Sensor.DH11)
-        #self.lora.pub_sensor_values("b", temperature, humidity)
         self.mqtt_handler.publish_message(b'brew/done', "Brew process completed")
         self.mqtt_handler.publish_message(b'brew/done/sensor/temp', str(temperature))
         
         #Turn off coffee machine
         if self.sensor_handler.isCoffeeOn():
-            print("Coffee machine turning off")
-            self.actuator_handler.flash_led()
+            self.actuator_handler.flash_blue()
+            self.actuator_handler.flash_red()
                 
     def is_night_time(self):
         current_hour = time.localtime()[3]  #index for hour
@@ -100,8 +100,9 @@ class Machine:
     
 
     def enter_deep_sleep(self, duration):
-        sleep_time = duration * 60 * 60 * 1000 # convert to ms
-        #machine.deepsleep(sleep_time) #Commeted out for presentation and development (cancels the run)
+        # Calculate the sleep time in milliseconds
+        sleep_time = duration * 60 * 60 * 1000  # Convert hours to milliseconds
+        #machine.deepsleep(sleep_time) #Commeted out for presentation
         time.sleep(5)
 
     def run(self):
