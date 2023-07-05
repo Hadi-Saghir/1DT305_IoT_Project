@@ -43,3 +43,21 @@ copy this code in secrets.py
       'do_handshake': True
     }
   }
+
+
+To add SSL To mangementcenter please edit this part in mqtt_connector_import.json:
+
+            "protocolVersion": 4,
+            "url": "mosquitto:1883",
+            "userPropertiesConnect": [],
+            "userName": "hadsag",
+            "password": "Testuser1",
+            "certPath": "ENTER PATH TO .crt",
+            "keyPath": "ENTER PATH TO .key",
+            "caCert": "ENTER PATH TO .csr",
+            "baseTopic": "",
+            "retain": false,
+            "qos": 0,
+            "scope": {
+                "id": "root"
+            

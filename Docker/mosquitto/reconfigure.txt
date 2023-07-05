@@ -6,8 +6,8 @@ password: Iminyourarea
 ## Standard Client
 Client for use with Streamsheets and other services.
 The file "mqtt_connector_import.json" contains a preconfigured Connector using this client that can be imported into Streamsheets.
-username: hadi_client
-password: Iminyourarea
+username: hadsag
+password: Testuser1
 
 !!!You can change them from mqtt_connector_import and docker-compose.yml!!!
 
